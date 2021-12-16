@@ -4,6 +4,8 @@ import requests
 import requests.cookies
 from bs4 import BeautifulSoup
 import os
+import json
+import time
 
 
 def split_cookies(full_browser_cookie):
@@ -23,6 +25,23 @@ def domain_from_url(url):
 url = "https://alx-intranet.hbtn.io/projects/current"
 browser_cookies = os.environ.get("ALX_COOKIES")
 cookies_jar = requests.cookies.RequestsCookieJar()
+domain = domain_from_url(url)
+
+scrape_interval = 15  # Interval (in seconds) between requests sent.
+data_file = "scrape_data.dat"
+
+if not os.path.exists(data_file):
+    open(data_file, 'w').close()
+
+with open(data_file) as save_file:
+    try:
+        scrape_data = json.load(save_file)
+    except:
+        scrape_data = {
+        "scraped_urls": []
+        }
+    
+
 
 for cookie_pair in split_cookies(browser_cookies):
     cookie_name = cookie_pair[0]
@@ -46,18 +65,7 @@ for cookie in response.cookies:
 
 print(f"Number of cookies: {len(response.cookies)}")
 print(f"\n\ncookies: {response.cookies}")
-
-
-# soup = BeautifulSoup(response.text, 'lxml')
-# for link in soup.find_all("a"):
-#     if not link.get("href").startswith("http"):
-#         print(f"Link before: {link.get('href')}")
-#         link['href'] = f"{domain_from_url(url)}{link.get('href')}"
-#         print(f"Link after: {link.get('href')}")
-
-# with open("response.html", 'w') as file:
-#     file.write(soup.prettify())
-
+print('-' * 70)
 
 soup = BeautifulSoup(response.text, 'lxml')
 project_sections = soup.select(".panel.panel-default")
@@ -69,5 +77,29 @@ for section in project_sections:
 
     print(f"\n\n-------{section_title}-------")
     for link in section.select("li a"):
+        link_text = link.text.replace(' ', '_').replace('/', '-')
+        project_url = link.get("href")
+        if not project_url.startswith("http"):
+            project_url = f"{domain}{project_url}"
+
+        if not project_url in scrape_data["scraped_urls"]:
+            # proceed with scraping of project_url
+            with open(f"{section_dir}/{link_text}.html", 'w') as project_page:
+                project_soup = BeautifulSoup(web_session.get(project_url).text, 'lxml')
+                for project_link in project_soup.select("a"):
+                    if not project_link.get("href").startswith("http"):
+                        project_link["href"] = f"{domain}{project_link.get('href')}"
+                project_page.write(project_soup.prettify())
+
+                # add to storage
+                scrape_data["scraped_urls"].append(project_url)
+                with open(data_file, 'a') as save_file:
+                    json.dump(scrape_data, save_file)
+
+                # delay a bit to avoid over-stressing the website with requests
+                time.sleep(scrape_interval)
+
         print(link)
+
+print("\n\nScraping Completed")
 
