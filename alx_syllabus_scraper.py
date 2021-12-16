@@ -93,7 +93,7 @@ for section in project_sections:
 
                 # add to storage
                 scrape_data["scraped_urls"].append(project_url)
-                with open(data_file, 'a') as save_file:
+                with open(data_file, 'w') as save_file:
                     json.dump(scrape_data, save_file)
 
                 # delay a bit to avoid over-stressing the website with requests
