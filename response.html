@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta content="" name="description"/>
+  <meta content="notranslate" name="google"/>
+  <title>
+   Project: 0x10. C - Variadic functions | ALX Africa Intranet
+  </title>
+  <link href="https://use.typekit.net/xgz4ilr.css" rel="stylesheet"/>
+  <link href="/assets/application_alx-e9a9f6067767cf1f7069ddaff05aa7c04c84c501e682038913b690cbbfe81efe.css" media="all" rel="stylesheet"/>
+  <script src="https://www.gstatic.com/charts/loader.js">
+  </script>
+  <script src="/assets/application-ea8a7b02638da1b925c9eccbb85717c57acef911098315acf7f34f4891c30389.js">
+  </script>
+  <link href="/favicon_alx.ico" rel="shortcut icon" type="image/x-icon"/>
+  <meta content="authenticity_token" name="csrf-param"/>
+  <meta content="PE4tTJ4BWyNYVJIqaLLeaR8x3zzkoEYk82UoQd/Dmf2OXBrlqb3OvKKsubX4utfjqLoaePEVYXrZyvdhyGFsyw==" name="csrf-token"/>
+  <link href="/apple-touch-icon_alx.png" rel="apple-touch-icon"/>
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+  <!-- Store user timezone -->
+  <script>
+   Cookies.set('timezone', (new Date()).getTimezoneOffset() / -60.0);
+  </script>
+  <!-- intro.js for interactive onboarding -->
+  <!-- React -->
+  <script src="/packs/js/application-e12ce743dc640ecb7ca6.js">
+  </script>
+  <link href="/packs/css/application-f61adf9f.css" media="screen" rel="stylesheet"/>
+ </head>
+ <body class="signed_in env_production" data-checker-special-theme="" data-theme-suffix="_alx" translate="no">
+  <input id="hbtn-slack-url" type="hidden" value="https://alx-students.slack.com"/>
+  <nav class="navbar navbar-default navbar-fixed-top topbar visible-xs">
+   <div class="navbar-header">
+    <button aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar-mobile" data-toggle="collapse" type="button">
+     <span class="sr-only">
+      Toggle navigation
+     </span>
+     <span class="icon-bar">
+     </span>
+     <span class="icon-bar">
+     </span>
+     <span class="icon-bar">
+     </span>
+    </button>
+    <a class="navbar-brand" href="https://alx-intranet.hbtn.io/">
+     <div class="logo">
+     </div>
+    </a>
+   </div>
+   <div class="collapse navbar-collapse navigation" id="navbar-mobile">
+    <ul class="nav navbar-nav">
+     <li data-container="body" data-placement="right" data-toggle="tooltip" title="Planning">
+      <a href="https://alx-intranet.hbtn.io/dashboards/my_planning">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-calendar">
+        </i>
+       </div>
+       <div class="visible-xs">
+        Planning
+       </div>
+      </a>
+     </li>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" id="sidebar-current-projects-item" title="Projects">
+      <a href="https://alx-intranet.hbtn.io/projects/current">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-code-fork">
+        </i>
+       </div>
+       <div class="visible-xs">
+        Projects
+       </div>
+      </a>
+     </li>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" title="My reports">
+      <a href="https://alx-intranet.hbtn.io/users/my_reports">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-sticky-note-o">
+        </i>
+       </div>
+       <div class="visible-xs">
+        My reports
+       </div>
+      </a>
+     </li>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" title="QA Reviews">
+      <a href="https://alx-intranet.hbtn.io/dashboards/corrections_i_can_make">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-check">
+        </i>
+       </div>
+       <div class="visible-xs">
+        QA Reviews
+       </div>
+      </a>
+     </li>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" title="Evaluation quizzes">
+      <a href="https://alx-intranet.hbtn.io/dashboards/my_current_evaluation_quizzes">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-question">
+        </i>
+       </div>
+       <div class="visible-xs">
+        Evaluation quizzes
+       </div>
+      </a>
+     </li>
+     <hr title="My resources"/>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" title="Curriculums">
+      <a href="https://alx-intranet.hbtn.io/dashboards/my_curriculums">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-graduation-cap">
+        </i>
+       </div>
+       <div class="visible-xs">
+        Curriculums
+       </div>
+      </a>
+     </li>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" id="sidebar-concepts-item" title="Concepts">
+      <a href="https://alx-intranet.hbtn.io/concepts">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-file-text">
+        </i>
+       </div>
+       <div class="visible-xs">
+        Concepts
+       </div>
+      </a>
+     </li>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" id="sidebar-dashboards-video-rooms" title="Conference rooms">
+      <a href="https://alx-intranet.hbtn.io/dashboards/video_rooms">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-comments">
+        </i>
+       </div>
+       <div class="visible-xs">
+        Conference rooms
+       </div>
+      </a>
+     </li>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" title="Servers">
+      <a href="https://alx-intranet.hbtn.io/servers">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-server">
+        </i>
+       </div>
+       <div class="visible-xs">
+        Servers
+       </div>
+      </a>
+     </li>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" id="sidebar-dashboards-my-containers" title="Sandboxes">
+      <a href="https://alx-intranet.hbtn.io/user_containers/current">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-terminal">
+        </i>
+       </div>
+       <div class="visible-xs">
+        Sandboxes
+       </div>
+      </a>
+     </li>
+     <hr title="My campus"/>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" title="Peers">
+      <a href="https://alx-intranet.hbtn.io/dashboards/my_peers">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-users">
+        </i>
+       </div>
+       <div class="visible-xs">
+        Peers
+       </div>
+      </a>
+     </li>
+     <li data-container="body" data-placement="right" data-toggle="tooltip" title="Captain's Logs">
+      <a href="https://alx-intranet.hbtn.io/dashboards/my_captain_log">
+       <div class="icon">
+        <i aria-hidden="true" class="fa fa-book">
+        </i>
+       </div>
+       <div class="visible-xs">
+        Captain's Logs
+       </div>
+      </a>
+     </li>
+     <hr class="visible-xs"/>
+     <li>
+      <div data-container="body" data-placement="right" data-toggle="tooltip" title="Slack">
+       <a href="https://alx-students.slack.com" target="_blank">
+        <div class="image slack">
+         <div class="inner">
+         </div>
+        </div>
+        <div class="visible-xs">
+         Slack
+        </div>
+       </a>
+      </div>
+      <div data-container="body" data-placement="right" data-toggle="tooltip" title="My Profile">
+       <a href="https://alx-intranet.hbtn.io/users/my_profile">
+        <div class="image">
+         <div class="inner" style="background-image: url('https://s3.amazonaws.com/alx-intranet.hbtn.io/users/photos/000/001/824/thumb/me_cropped_square.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIARDDGGGOUSBVO6H7D%2F20211216%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20211216T110411Z&amp;X-Amz-Expires=600&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=44d5f0d99d6b5b14c2e34067d153a67d6e7d04e2ac51db82336a7a9c9fed44a4')">
+         </div>
+        </div>
+        <div class="visible-xs">
+         My Profile
+        </div>
+       </a>
+      </div>
+     </li>
+    </ul>
+   </div>
+  </nav>
+  <div class="hidden-xs navigation sidebar">
+   <a class="logo-container" href="https://alx-intranet.hbtn.io/">
+    <div class="logo">
+    </div>
+   </a>
+   <ul>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" title="Planning">
+     <a href="https://alx-intranet.hbtn.io/dashboards/my_planning">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-calendar">
+       </i>
+      </div>
+      <div class="visible-xs">
+       Planning
+      </div>
+     </a>
+    </li>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" id="sidebar-current-projects-item" title="Projects">
+     <a href="https://alx-intranet.hbtn.io/projects/current">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-code-fork">
+       </i>
+      </div>
+      <div class="visible-xs">
+       Projects
+      </div>
+     </a>
+    </li>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" title="My reports">
+     <a href="https://alx-intranet.hbtn.io/users/my_reports">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-sticky-note-o">
+       </i>
+      </div>
+      <div class="visible-xs">
+       My reports
+      </div>
+     </a>
+    </li>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" title="QA Reviews">
+     <a href="https://alx-intranet.hbtn.io/dashboards/corrections_i_can_make">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-check">
+       </i>
+      </div>
+      <div class="visible-xs">
+       QA Reviews
+      </div>
+     </a>
+    </li>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" title="Evaluation quizzes">
+     <a href="https://alx-intranet.hbtn.io/dashboards/my_current_evaluation_quizzes">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-question">
+       </i>
+      </div>
+      <div class="visible-xs">
+       Evaluation quizzes
+      </div>
+     </a>
+    </li>
+    <hr title="My resources"/>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" title="Curriculums">
+     <a href="https://alx-intranet.hbtn.io/dashboards/my_curriculums">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-graduation-cap">
+       </i>
+      </div>
+      <div class="visible-xs">
+       Curriculums
+      </div>
+     </a>
+    </li>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" id="sidebar-concepts-item" title="Concepts">
+     <a href="https://alx-intranet.hbtn.io/concepts">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-file-text">
+       </i>
+      </div>
+      <div class="visible-xs">
+       Concepts
+      </div>
+     </a>
+    </li>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" id="sidebar-dashboards-video-rooms" title="Conference rooms">
+     <a href="https://alx-intranet.hbtn.io/dashboards/video_rooms">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-comments">
+       </i>
+      </div>
+      <div class="visible-xs">
+       Conference rooms
+      </div>
+     </a>
+    </li>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" title="Servers">
+     <a href="https://alx-intranet.hbtn.io/servers">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-server">
+       </i>
+      </div>
+      <div class="visible-xs">
+       Servers
+      </div>
+     </a>
+    </li>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" id="sidebar-dashboards-my-containers" title="Sandboxes">
+     <a href="https://alx-intranet.hbtn.io/user_containers/current">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-terminal">
+       </i>
+      </div>
+      <div class="visible-xs">
+       Sandboxes
+      </div>
+     </a>
+    </li>
+    <hr title="My campus"/>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" title="Peers">
+     <a href="https://alx-intranet.hbtn.io/dashboards/my_peers">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-users">
+       </i>
+      </div>
+      <div class="visible-xs">
+       Peers
+      </div>
+     </a>
+    </li>
+    <li data-container="body" data-placement="right" data-toggle="tooltip" title="Captain's Logs">
+     <a href="https://alx-intranet.hbtn.io/dashboards/my_captain_log">
+      <div class="icon">
+       <i aria-hidden="true" class="fa fa-book">
+       </i>
+      </div>
+      <div class="visible-xs">
+       Captain's Logs
+      </div>
+     </a>
+    </li>
+    <hr class="visible-xs"/>
+    <li>
+     <div data-container="body" data-placement="right" data-toggle="tooltip" title="Slack">
+      <a href="https://alx-students.slack.com" target="_blank">
+       <div class="image slack">
+        <div class="inner">
+        </div>
+       </div>
+       <div class="visible-xs">
+        Slack
+       </div>
+      </a>
+     </div>
+     <div data-container="body" data-placement="right" data-toggle="tooltip" title="My Profile">
+      <a href="https://alx-intranet.hbtn.io/users/my_profile">
+       <div class="image">
+        <div class="inner" style="background-image: url('https://s3.amazonaws.com/alx-intranet.hbtn.io/users/photos/000/001/824/thumb/me_cropped_square.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIARDDGGGOUSBVO6H7D%2F20211216%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20211216T110411Z&amp;X-Amz-Expires=600&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=44d5f0d99d6b5b14c2e34067d153a67d6e7d04e2ac51db82336a7a9c9fed44a4')">
+        </div>
+       </div>
+       <div class="visible-xs">
+        My Profile
+       </div>
+      </a>
+     </div>
+    </li>
+   </ul>
+  </div>
+  <main>
+   <div id="layout-bars">
+   </div>
+   <article class="">
+    <div class="project row">
+     <div class="col-xs-12 col-md-10 col-lg-8 contains-images">
+      <h1 class="gap">
+       0x10. C - Variadic functions
+      </h1>
+      <div data-react-cache-id="tags/Tags-0" data-react-class="tags/Tags" data-react-props='{"tags":[]}'>
+      </div>
+      <ul class="list-group metadata" id="project-metadata">
+       <li class="list-group-item">
+        <i aria-hidden="true" class="fa fa-user fa-fw">
+        </i>
+        By Julien Barbier
+       </li>
+       <li class="list-group-item">
+        <i aria-hidden="true" class="fa fa-cogs fa-fw">
+        </i>
+        Weight: 1
+       </li>
+       <li class="list-group-item">
+        <i aria-hidden="true" class="fa fa-calendar fa-fw">
+        </i>
+        Project over - took place from 09-30-2021 to 10-01-2021
+          - you're done with
+        <span id="student_task_done_percentage">
+         75
+        </span>
+        % of tasks.
+       </li>
+       <li class="list-group-item">
+        <i aria-hidden="true" class="fa fa-check-square fa-fw">
+        </i>
+        QA review fully automated.
+       </li>
+       <div class="gap clean well">
+        <h4>
+         In a nutshell…
+        </h4>
+        <ul>
+         <li>
+          <strong>
+           Auto QA review:
+          </strong>
+          20.8/33 mandatory
+         </li>
+         <li>
+          <strong>
+           Altogether:
+          </strong>
+          <strong>
+           63.03%
+          </strong>
+          <ul>
+           <li>
+            Mandatory: 63.03%
+           </li>
+           <li>
+            Optional: no optional tasks
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </div>
+      </ul>
+      <div data-project-id="227" id="project_id" style="display: none">
+      </div>
+      <div class="well clean" id="project-description">
+       <h2>
+        Resources
+       </h2>
+       <p>
+        <strong>
+         Read or watch
+        </strong>
+        :
+       </p>
+       <ul>
+        <li>
+         <a href="https://alx-intranet.hbtn.io/rltoken/wLRJdO8pA2-Vb-rF2Y71sA" target="_blank" title="stdarg.h">
+          stdarg.h
+         </a>
+        </li>
+        <li>
+         <a href="https://alx-intranet.hbtn.io/rltoken/3gW8GycmyjarbJR76FkrzA" target="_blank" title="Variadic Functions">
+          Variadic Functions
+         </a>
+        </li>
+        <li>
+         <a href="https://alx-intranet.hbtn.io/rltoken/_RRPCY32VODyN_r2HIEnBQ" target="_blank" title="Const Keyword">
+          Const Keyword
+         </a>
+        </li>
+       </ul>
+       <!-- - [C - Variable Arguments](/rltoken/qaPJ-LRiEzLvPH6-F3SqJQ) 
+- [Functions with Variable Argument Lists in C using va_list](/rltoken/wEciKT_uR-d9tQHwTWfbHg) -->
+       <p>
+        <strong>
+         man or help
+        </strong>
+        :
+       </p>
+       <ul>
+        <li>
+         <code>
+          stdarg
+         </code>
+        </li>
+       </ul>
+       <h2>
+        Learning Objectives
+       </h2>
+       <p>
+        At the end of this project, you are expected to be able to
+        <a href="https://alx-intranet.hbtn.io/rltoken/ibS4gLVrbsqSDUdPhq_4Vg" target="_blank" title="explain to anyone">
+         explain to anyone
+        </a>
+        ,
+        <strong>
+         without the help of Google
+        </strong>
+        :
+       </p>
+       <h3>
+        General
+       </h3>
+       <ul>
+        <li>
+         What are variadic functions
+        </li>
+        <li>
+         How to use
+         <code>
+          va_start
+         </code>
+         ,
+         <code>
+          va_arg
+         </code>
+         and
+         <code>
+          va_end
+         </code>
+         macros
+        </li>
+        <li>
+         Why and how to use the
+         <code>
+          const
+         </code>
+         type qualifier
+        </li>
+       </ul>
+       <h2>
+        Requirements
+       </h2>
+       <h3>
+        General
+       </h3>
+       <ul>
+        <li>
+         Allowed editors:
+         <code>
+          vi
+         </code>
+         ,
+         <code>
+          vim
+         </code>
+         ,
+         <code>
+          emacs
+         </code>
+        </li>
+        <li>
+         All your files will be compiled on Ubuntu 20.04 LTS using
+         <code>
+          gcc
+         </code>
+         , using the options
+         <code>
+          -Wall -Werror -Wextra -pedantic -std=gnu89
+         </code>
+        </li>
+        <li>
+         All your files should end with a new line
+        </li>
+        <li>
+         A
+         <code>
+          README.md
+         </code>
+         file, at the root of the folder of the project is mandatory
+        </li>
+        <li>
+         Your code should use the
+         <code>
+          Betty
+         </code>
+         style. It will be checked using
+         <a href="https://github.com/holbertonschool/Betty/blob/master/betty-style.pl" target="_blank" title="betty-style.pl">
+          betty-style.pl
+         </a>
+         and
+         <a href="https://github.com/holbertonschool/Betty/blob/master/betty-doc.pl" target="_blank" title="betty-doc.pl">
+          betty-doc.pl
+         </a>
+        </li>
+        <li>
+         You are not allowed to use global variables
+        </li>
+        <li>
+         No more than 5 functions per file
+        </li>
+        <li>
+         The only C standard library functions allowed are
+         <code>
+          malloc
+         </code>
+         ,
+         <code>
+          free
+         </code>
+         and
+         <code>
+          exit
+         </code>
+         . Any use of functions like
+         <code>
+          printf
+         </code>
+         ,
+         <code>
+          puts
+         </code>
+         ,
+         <code>
+          calloc
+         </code>
+         ,
+         <code>
+          realloc
+         </code>
+         etc… is forbidden
+        </li>
+        <li>
+         You are allowed to use the following macros:
+         <code>
+          va_start
+         </code>
+         ,
+         <code>
+          va_arg
+         </code>
+         and
+         <code>
+          va_end
+         </code>
+        </li>
+        <li>
+         You are allowed to use
+         <a href="https://github.com/holbertonschool/_putchar.c/blob/master/_putchar.c" target="_blank" title="_putchar">
+          _putchar
+         </a>
+        </li>
+        <li>
+         You don’t have to push
+         <code>
+          _putchar.c
+         </code>
+         , we will use our file. If you do it won’t be taken into account
+        </li>
+        <li>
+         In the following examples, the
+         <code>
+          main.c
+         </code>
+         files are shown as examples. You can use them to test your functions, but you don’t have to push them to your repo (if you do we won’t take them into account). We will use our own
+         <code>
+          main.c
+         </code>
+         files at compilation. Our
+         <code>
+          main.c
+         </code>
+         files might be different from the one shown in the examples
+        </li>
+        <li>
+         The prototypes of all your functions and the prototype of the function
+         <code>
+          _putchar
+         </code>
+         should be included in your header file called
+         <code>
+          variadic_functions.h
+         </code>
+        </li>
+        <li>
+         Don’t forget to push your header file
+        </li>
+        <li>
+         All your header files should be include guarded
+        </li>
+       </ul>
+      </div>
+      <h2 class="gap">
+       Tasks
+      </h2>
+      <div data-position="1" data-role="task963" id="task-num-0">
+       <div class="panel panel-default task-card" id="task-963">
+        <span data-id="1824" id="user_id">
+        </span>
+        <div class="panel-heading panel-heading-actions">
+         <h3 class="panel-title">
+          0. Beauty is variable, ugliness is constant
+         </h3>
+         <div>
+          <span class="label label-info">
+           mandatory
+          </span>
+         </div>
+        </div>
+        <div class="panel-body">
+         <span data-id="1824" id="user_id">
+         </span>
+         <!-- Progress vs Score -->
+         <div class="task_progress_score_bar" data-correction-id="83111" data-task-id="963">
+          <div class="task_progress_bar">
+           <div class="task_score_bar">
+           </div>
+          </div>
+          <div class="task_progress_score_text">
+           Score:
+           <span class="task_score_value">
+            0%
+           </span>
+           (
+           <span class="task_progress_value">
+            Checks completed: 0%
+           </span>
+           )
+          </div>
+         </div>
+         <!-- Task Body -->
+         <p>
+          Write a function that returns the sum of all its parameters.
+         </p>
+         <ul>
+          <li>
+           Prototype:
+           <code>
+            int sum_them_all(const unsigned int n, ...);
+           </code>
+          </li>
+          <li>
+           If
+           <code>
+            n == 0
+           </code>
+           , return
+           <code>
+            0
+           </code>
+          </li>
+         </ul>
+         <pre><code>julien@ubuntu:~/0x0f. variadic functions$ cat 0-main.c
+#include &lt;stdio.h&gt;
+#include "variadic_functions.h"
+
+/**
+ * main - check the code
+ *
+ * Return: Always 0.
+ */
+int main(void)
+{
+    int sum;
+
+    sum = sum_them_all(2, 98, 1024);
+    printf("%d\n", sum);
+    sum = sum_them_all(4, 98, 1024, 402, -1024);
+    printf("%d\n", sum);    
+    return (0);
+}
+julien@ubuntu:~/0x0f. variadic functions$ gcc -Wall -pedantic -Werror -Wextra -std=gnu89 0-main.c 0-sum_them_all.c -o a
+julien@ubuntu:~/0x0f. variadic functions$ ./a 
+1122
+500
+julien@ubuntu:~/0x0f. variadic functions$ 
+</code></pre>
+        </div>
+        <div class="list-group">
+         <!-- Task URLs -->
+         <!-- Github information -->
+         <div class="list-group-item">
+          <p>
+           <strong>
+            Repo:
+           </strong>
+          </p>
+          <ul>
+           <li>
+            GitHub repository:
+            <code>
+             alx-low_level_programming
+            </code>
+           </li>
+           <li>
+            Directory:
+            <code>
+             0x10-variadic_functions
+            </code>
+           </li>
+           <li>
+            File:
+            <code>
+             0-sum_them_all.c
+            </code>
+           </li>
+          </ul>
+         </div>
+         <!-- Self-paced manual review -->
+        </div>
+        <!-- Panel footer - Controls -->
+        <div class="panel-footer">
+         <div>
+          <button class="student_task_done btn btn-default btn-sm no" data-task-id="963">
+           <span class="no">
+            <i aria-hidden="true" class="fa fa-square-o">
+            </i>
+           </span>
+           <span class="yes">
+            <i aria-hidden="true" class="fa fa-check-square-o">
+            </i>
+           </span>
+           <span class="pending">
+            <i aria-hidden="true" class="fa fa-spinner fa-pulse">
+            </i>
+           </span>
+           Done
+           <span class="no pending">
+            ?
+           </span>
+           <span class="yes">
+            !
+           </span>
+          </button>
+          <button class="users_done_for_task btn btn-default btn-sm" data-project-id="227" data-target="#task-963-users-done-modal" data-task-id="963" data-toggle="modal">
+           Help
+          </button>
+          <div class="modal fade users-done-modal" data-project-id="227" data-task-id="963" id="task-963-users-done-modal">
+           <div class="modal-dialog">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               Students who are done with "0. Beauty is variable, ugliness is constant"
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="list-group">
+              </div>
+              <div class="spinner">
+               <div class="bounce1">
+               </div>
+               <div class="bounce2">
+               </div>
+               <div class="bounce3">
+               </div>
+              </div>
+              <div class="error">
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <button class="btn btn-default btn-sm" data-target="#task-test-correction-963-correction-modal" data-task-id="963" data-toggle="modal" id="task-num-0-check-code-btn">
+           Check your code
+          </button>
+          <div class="modal fade task_correction_modal student_modal" id="task-test-correction-963-correction-modal">
+           <div class="modal-dialog">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               Correction of "0. Beauty is variable, ugliness is constant"
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="actions">
+               <center>
+                <div class="alert alert-info hidden">
+                </div>
+                <button class="btn btn-primary correction_request_test_send" data-task-id="963" name="button" type="submit">
+                 Start a new test
+                </button>
+                <button class="btn btn-default close-modal hidden" data-dismiss="modal" type="button">
+                 Close
+                </button>
+                <div class="spinner" style="display: none;">
+                 <div class="bounce1">
+                 </div>
+                 <div class="bounce2">
+                 </div>
+                 <div class="bounce3">
+                 </div>
+                </div>
+                <div class="error">
+                </div>
+                <div class="info">
+                </div>
+               </center>
+              </div>
+              <div class="result">
+              </div>
+              <div class="help">
+               <button data-task-id="963">
+                <i aria-hidden="true" class="fa fa-info-circle">
+                </i>
+               </button>
+               <div class="help-container" data-task-id="963">
+                <div class="check-line">
+                 <div class="check-inline requirement success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Requirement success
+                 </div>
+                 <div class="check-inline requirement fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Requirement fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline code success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Code success
+                 </div>
+                 <div class="check-inline code fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Code fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline efficiency success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Efficiency success
+                 </div>
+                 <div class="check-inline efficiency fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Efficiency fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline answer success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Text answer success
+                 </div>
+                 <div class="check-inline answer fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Text answer fail
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+            <!-- /.modal-content -->
+           </div>
+           <!-- /.modal-dialog -->
+          </div>
+          <button class="btn btn-primary btn-sm task_ask_new_correction" data-correction-id="83111" data-task-id="963">
+           Ask for a new correction
+           <span class="in_progress_info">
+            : in progress...
+           </span>
+           <span class="error_occured_info">
+            : an error occured
+           </span>
+          </button>
+          <button class="btn btn-default btn-sm" data-target="#container-specs-modal" data-toggle="modal">
+           <i aria-hidden="true" class="fa fa-terminal">
+           </i>
+           <span>
+            Get a sandbox
+           </span>
+          </button>
+          <button class="btn btn-default btn-sm" data-target="#task-qa-review-963-modal" data-task-id="963" data-toggle="modal">
+           QA Review
+          </button>
+          <div class="modal fade task_get_qa_review" data-correction-id="83111" data-task-id="963" id="task-qa-review-963-modal">
+           <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               0. Beauty is variable, ugliness is constant
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="spinner gap">
+               <div class="bounce1">
+               </div>
+               <div class="bounce2">
+               </div>
+               <div class="bounce3">
+               </div>
+              </div>
+              <div class="review-container">
+               <div class="review-corrector">
+               </div>
+               <div class="review-github">
+               </div>
+               <div class="review-percentage_down">
+               </div>
+               <ul class="review-checks list-group sm-gap">
+               </ul>
+               <div class="review-comment">
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div data-position="2" data-role="task964" id="task-num-1">
+       <div class="panel panel-default task-card" id="task-964">
+        <span data-id="1824" id="user_id">
+        </span>
+        <div class="panel-heading panel-heading-actions">
+         <h3 class="panel-title">
+          1. To be is to be the value of a variable
+         </h3>
+         <div>
+          <span class="label label-info">
+           mandatory
+          </span>
+         </div>
+        </div>
+        <div class="panel-body">
+         <span data-id="1824" id="user_id">
+         </span>
+         <!-- Progress vs Score -->
+         <div class="task_progress_score_bar" data-correction-id="83111" data-task-id="964">
+          <div class="task_progress_bar">
+           <div class="task_score_bar">
+           </div>
+          </div>
+          <div class="task_progress_score_text">
+           Score:
+           <span class="task_score_value">
+            0%
+           </span>
+           (
+           <span class="task_progress_value">
+            Checks completed: 0%
+           </span>
+           )
+          </div>
+         </div>
+         <!-- Task Body -->
+         <p>
+          Write a function that prints numbers, followed by a new line.
+         </p>
+         <ul>
+          <li>
+           Prototype:
+           <code>
+            void print_numbers(const char *separator, const unsigned int n, ...);
+           </code>
+          </li>
+          <li>
+           where
+           <code>
+            separator
+           </code>
+           is the string to be printed between numbers
+          </li>
+          <li>
+           and
+           <code>
+            n
+           </code>
+           is the number of integers passed to the function
+          </li>
+          <li>
+           You are allowed to use
+           <code>
+            printf
+           </code>
+          </li>
+          <li>
+           If
+           <code>
+            separator
+           </code>
+           is
+           <code>
+            NULL
+           </code>
+           , don’t print it
+          </li>
+          <li>
+           Print a new line at the end of your function
+          </li>
+         </ul>
+         <pre><code>julien@ubuntu:~/0x0f. variadic functions$ cat 1-main.c
+#include "variadic_functions.h"
+
+/**
+ * main - check the code
+ *
+ * Return: Always 0.
+ */
+int main(void)
+{
+    print_numbers(", ", 4, 0, 98, -1024, 402);
+    return (0);
+}
+julien@ubuntu:~/0x0f. variadic functions$ gcc -Wall -pedantic -Werror -Wextra -std=gnu89 1-main.c 1-print_numbers.c -o b
+julien@ubuntu:~/0x0f. variadic functions$ ./b
+0, 98, -1024, 402
+julien@ubuntu:~/0x0f. variadic functions$ 
+</code></pre>
+        </div>
+        <div class="list-group">
+         <!-- Task URLs -->
+         <!-- Github information -->
+         <div class="list-group-item">
+          <p>
+           <strong>
+            Repo:
+           </strong>
+          </p>
+          <ul>
+           <li>
+            GitHub repository:
+            <code>
+             alx-low_level_programming
+            </code>
+           </li>
+           <li>
+            Directory:
+            <code>
+             0x10-variadic_functions
+            </code>
+           </li>
+           <li>
+            File:
+            <code>
+             1-print_numbers.c
+            </code>
+           </li>
+          </ul>
+         </div>
+         <!-- Self-paced manual review -->
+        </div>
+        <!-- Panel footer - Controls -->
+        <div class="panel-footer">
+         <div>
+          <button class="student_task_done btn btn-default btn-sm yes" data-task-id="964">
+           <span class="no">
+            <i aria-hidden="true" class="fa fa-square-o">
+            </i>
+           </span>
+           <span class="yes">
+            <i aria-hidden="true" class="fa fa-check-square-o">
+            </i>
+           </span>
+           <span class="pending">
+            <i aria-hidden="true" class="fa fa-spinner fa-pulse">
+            </i>
+           </span>
+           Done
+           <span class="no pending">
+            ?
+           </span>
+           <span class="yes">
+            !
+           </span>
+          </button>
+          <button class="users_done_for_task btn btn-default btn-sm" data-project-id="227" data-target="#task-964-users-done-modal" data-task-id="964" data-toggle="modal">
+           Help
+          </button>
+          <div class="modal fade users-done-modal" data-project-id="227" data-task-id="964" id="task-964-users-done-modal">
+           <div class="modal-dialog">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               Students who are done with "1. To be is to be the value of a variable"
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="list-group">
+              </div>
+              <div class="spinner">
+               <div class="bounce1">
+               </div>
+               <div class="bounce2">
+               </div>
+               <div class="bounce3">
+               </div>
+              </div>
+              <div class="error">
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <button class="btn btn-default btn-sm" data-target="#task-test-correction-964-correction-modal" data-task-id="964" data-toggle="modal" id="task-num-1-check-code-btn">
+           Check your code
+          </button>
+          <div class="modal fade task_correction_modal student_modal" id="task-test-correction-964-correction-modal">
+           <div class="modal-dialog">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               Correction of "1. To be is to be the value of a variable"
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="actions">
+               <center>
+                <div class="alert alert-info hidden">
+                </div>
+                <button class="btn btn-primary correction_request_test_send" data-task-id="964" name="button" type="submit">
+                 Start a new test
+                </button>
+                <button class="btn btn-default close-modal hidden" data-dismiss="modal" type="button">
+                 Close
+                </button>
+                <div class="spinner" style="display: none;">
+                 <div class="bounce1">
+                 </div>
+                 <div class="bounce2">
+                 </div>
+                 <div class="bounce3">
+                 </div>
+                </div>
+                <div class="error">
+                </div>
+                <div class="info">
+                </div>
+               </center>
+              </div>
+              <div class="result">
+              </div>
+              <div class="help">
+               <button data-task-id="964">
+                <i aria-hidden="true" class="fa fa-info-circle">
+                </i>
+               </button>
+               <div class="help-container" data-task-id="964">
+                <div class="check-line">
+                 <div class="check-inline requirement success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Requirement success
+                 </div>
+                 <div class="check-inline requirement fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Requirement fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline code success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Code success
+                 </div>
+                 <div class="check-inline code fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Code fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline efficiency success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Efficiency success
+                 </div>
+                 <div class="check-inline efficiency fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Efficiency fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline answer success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Text answer success
+                 </div>
+                 <div class="check-inline answer fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Text answer fail
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+            <!-- /.modal-content -->
+           </div>
+           <!-- /.modal-dialog -->
+          </div>
+          <button class="btn btn-default btn-sm" data-target="#container-specs-modal" data-toggle="modal">
+           <i aria-hidden="true" class="fa fa-terminal">
+           </i>
+           <span>
+            Get a sandbox
+           </span>
+          </button>
+          <button class="btn btn-default btn-sm" data-target="#task-qa-review-964-modal" data-task-id="964" data-toggle="modal">
+           QA Review
+          </button>
+          <div class="modal fade task_get_qa_review" data-correction-id="83111" data-task-id="964" id="task-qa-review-964-modal">
+           <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               1. To be is to be the value of a variable
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="spinner gap">
+               <div class="bounce1">
+               </div>
+               <div class="bounce2">
+               </div>
+               <div class="bounce3">
+               </div>
+              </div>
+              <div class="review-container">
+               <div class="review-corrector">
+               </div>
+               <div class="review-github">
+               </div>
+               <div class="review-percentage_down">
+               </div>
+               <ul class="review-checks list-group sm-gap">
+               </ul>
+               <div class="review-comment">
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div data-position="3" data-role="task965" id="task-num-2">
+       <div class="panel panel-default task-card" id="task-965">
+        <span data-id="1824" id="user_id">
+        </span>
+        <div class="panel-heading panel-heading-actions">
+         <h3 class="panel-title">
+          2. One woman's constant is another woman's variable
+         </h3>
+         <div>
+          <span class="label label-info">
+           mandatory
+          </span>
+         </div>
+        </div>
+        <div class="panel-body">
+         <span data-id="1824" id="user_id">
+         </span>
+         <!-- Progress vs Score -->
+         <div class="task_progress_score_bar" data-correction-id="83111" data-task-id="965">
+          <div class="task_progress_bar">
+           <div class="task_score_bar">
+           </div>
+          </div>
+          <div class="task_progress_score_text">
+           Score:
+           <span class="task_score_value">
+            0%
+           </span>
+           (
+           <span class="task_progress_value">
+            Checks completed: 0%
+           </span>
+           )
+          </div>
+         </div>
+         <!-- Task Body -->
+         <p>
+          Write a function that prints strings, followed by a new line.
+         </p>
+         <ul>
+          <li>
+           Prototype:
+           <code>
+            void print_strings(const char *separator, const unsigned int n, ...);
+           </code>
+          </li>
+          <li>
+           where
+           <code>
+            separator
+           </code>
+           is the string to be printed between the strings
+          </li>
+          <li>
+           and
+           <code>
+            n
+           </code>
+           is the number of strings passed to the function
+          </li>
+          <li>
+           You are allowed to use
+           <code>
+            printf
+           </code>
+          </li>
+          <li>
+           If separator is NULL, don’t print it
+          </li>
+          <li>
+           If one of the string is NULL, print
+           <code>
+            (nil)
+           </code>
+           instead
+          </li>
+          <li>
+           Print a new line at the end of your function
+          </li>
+         </ul>
+         <pre><code>julien@ubuntu:~/0x0f. Variadic functions$ cat 2-main.c
+#include "variadic_functions.h"
+
+/**
+ * main - check the code
+ *
+ * Return: Always 0.
+ */
+int main(void)
+{
+    print_strings(", ", 2, "Jay", "Django");
+    return (0);
+}
+julien@ubuntu:~/0x0f. Variadic functions$ gcc -Wall -pedantic -Werror -Wextra -std=gnu89 2-main.c 2-print_strings.c -o c
+julien@ubuntu:~/0x0f. Variadic functions$ ./c 
+Jay, Django
+julien@ubuntu:~/0x0f. Variadic functions$ 
+</code></pre>
+        </div>
+        <div class="list-group">
+         <!-- Task URLs -->
+         <!-- Github information -->
+         <div class="list-group-item">
+          <p>
+           <strong>
+            Repo:
+           </strong>
+          </p>
+          <ul>
+           <li>
+            GitHub repository:
+            <code>
+             alx-low_level_programming
+            </code>
+           </li>
+           <li>
+            Directory:
+            <code>
+             0x10-variadic_functions
+            </code>
+           </li>
+           <li>
+            File:
+            <code>
+             2-print_strings.c
+            </code>
+           </li>
+          </ul>
+         </div>
+         <!-- Self-paced manual review -->
+        </div>
+        <!-- Panel footer - Controls -->
+        <div class="panel-footer">
+         <div>
+          <button class="student_task_done btn btn-default btn-sm yes" data-task-id="965">
+           <span class="no">
+            <i aria-hidden="true" class="fa fa-square-o">
+            </i>
+           </span>
+           <span class="yes">
+            <i aria-hidden="true" class="fa fa-check-square-o">
+            </i>
+           </span>
+           <span class="pending">
+            <i aria-hidden="true" class="fa fa-spinner fa-pulse">
+            </i>
+           </span>
+           Done
+           <span class="no pending">
+            ?
+           </span>
+           <span class="yes">
+            !
+           </span>
+          </button>
+          <button class="users_done_for_task btn btn-default btn-sm" data-project-id="227" data-target="#task-965-users-done-modal" data-task-id="965" data-toggle="modal">
+           Help
+          </button>
+          <div class="modal fade users-done-modal" data-project-id="227" data-task-id="965" id="task-965-users-done-modal">
+           <div class="modal-dialog">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               Students who are done with "2. One woman's constant is another woman's variable"
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="list-group">
+              </div>
+              <div class="spinner">
+               <div class="bounce1">
+               </div>
+               <div class="bounce2">
+               </div>
+               <div class="bounce3">
+               </div>
+              </div>
+              <div class="error">
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <button class="btn btn-default btn-sm" data-target="#task-test-correction-965-correction-modal" data-task-id="965" data-toggle="modal" id="task-num-2-check-code-btn">
+           Check your code
+          </button>
+          <div class="modal fade task_correction_modal student_modal" id="task-test-correction-965-correction-modal">
+           <div class="modal-dialog">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               Correction of "2. One woman's constant is another woman's variable"
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="actions">
+               <center>
+                <div class="alert alert-info hidden">
+                </div>
+                <button class="btn btn-primary correction_request_test_send" data-task-id="965" name="button" type="submit">
+                 Start a new test
+                </button>
+                <button class="btn btn-default close-modal hidden" data-dismiss="modal" type="button">
+                 Close
+                </button>
+                <div class="spinner" style="display: none;">
+                 <div class="bounce1">
+                 </div>
+                 <div class="bounce2">
+                 </div>
+                 <div class="bounce3">
+                 </div>
+                </div>
+                <div class="error">
+                </div>
+                <div class="info">
+                </div>
+               </center>
+              </div>
+              <div class="result">
+              </div>
+              <div class="help">
+               <button data-task-id="965">
+                <i aria-hidden="true" class="fa fa-info-circle">
+                </i>
+               </button>
+               <div class="help-container" data-task-id="965">
+                <div class="check-line">
+                 <div class="check-inline requirement success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Requirement success
+                 </div>
+                 <div class="check-inline requirement fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Requirement fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline code success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Code success
+                 </div>
+                 <div class="check-inline code fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Code fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline efficiency success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Efficiency success
+                 </div>
+                 <div class="check-inline efficiency fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Efficiency fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline answer success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Text answer success
+                 </div>
+                 <div class="check-inline answer fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Text answer fail
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+            <!-- /.modal-content -->
+           </div>
+           <!-- /.modal-dialog -->
+          </div>
+          <button class="btn btn-default btn-sm" data-target="#container-specs-modal" data-toggle="modal">
+           <i aria-hidden="true" class="fa fa-terminal">
+           </i>
+           <span>
+            Get a sandbox
+           </span>
+          </button>
+          <button class="btn btn-default btn-sm" data-target="#task-qa-review-965-modal" data-task-id="965" data-toggle="modal">
+           QA Review
+          </button>
+          <div class="modal fade task_get_qa_review" data-correction-id="83111" data-task-id="965" id="task-qa-review-965-modal">
+           <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               2. One woman's constant is another woman's variable
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="spinner gap">
+               <div class="bounce1">
+               </div>
+               <div class="bounce2">
+               </div>
+               <div class="bounce3">
+               </div>
+              </div>
+              <div class="review-container">
+               <div class="review-corrector">
+               </div>
+               <div class="review-github">
+               </div>
+               <div class="review-percentage_down">
+               </div>
+               <ul class="review-checks list-group sm-gap">
+               </ul>
+               <div class="review-comment">
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div data-position="4" data-role="task966" id="task-num-3">
+       <div class="panel panel-default task-card" id="task-966">
+        <span data-id="1824" id="user_id">
+        </span>
+        <div class="panel-heading panel-heading-actions">
+         <h3 class="panel-title">
+          3. To be is a to be the value of a variable
+         </h3>
+         <div>
+          <span class="label label-info">
+           mandatory
+          </span>
+         </div>
+        </div>
+        <div class="panel-body">
+         <span data-id="1824" id="user_id">
+         </span>
+         <!-- Progress vs Score -->
+         <div class="task_progress_score_bar" data-correction-id="83111" data-task-id="966">
+          <div class="task_progress_bar">
+           <div class="task_score_bar">
+           </div>
+          </div>
+          <div class="task_progress_score_text">
+           Score:
+           <span class="task_score_value">
+            0%
+           </span>
+           (
+           <span class="task_progress_value">
+            Checks completed: 0%
+           </span>
+           )
+          </div>
+         </div>
+         <!-- Task Body -->
+         <p>
+          Write a function that prints anything.
+         </p>
+         <ul>
+          <li>
+           Prototype:
+           <code>
+            void print_all(const char * const format, ...);
+           </code>
+          </li>
+          <li>
+           where
+           <code>
+            format
+           </code>
+           is a list of types of arguments passed to the function
+           <ul>
+            <li>
+             <code>
+              c
+             </code>
+             :
+             <code>
+              char
+             </code>
+            </li>
+            <li>
+             <code>
+              i
+             </code>
+             :
+             <code>
+              integer
+             </code>
+            </li>
+            <li>
+             <code>
+              f
+             </code>
+             :
+             <code>
+              float
+             </code>
+            </li>
+            <li>
+             <code>
+              s
+             </code>
+             :
+             <code>
+              char *
+             </code>
+             (if the string is NULL, print
+             <code>
+              (nil)
+             </code>
+             instead
+            </li>
+            <li>
+             any other char should be ignored
+            </li>
+            <li>
+             see example
+            </li>
+           </ul>
+          </li>
+          <li>
+           You are not allowed to use
+           <code>
+            for
+           </code>
+           ,
+           <code>
+            goto
+           </code>
+           , ternary operator,
+           <code>
+            else
+           </code>
+           ,
+           <code>
+            do ... while
+           </code>
+          </li>
+          <li>
+           You can use a maximum of
+           <ul>
+            <li>
+             2
+             <code>
+              while
+             </code>
+             loops
+            </li>
+            <li>
+             2
+             <code>
+              if
+             </code>
+            </li>
+           </ul>
+          </li>
+          <li>
+           You can declare a maximum of
+           <code>
+            9
+           </code>
+           variables
+          </li>
+          <li>
+           You are allowed to use
+           <code>
+            printf
+           </code>
+          </li>
+          <li>
+           Print a new line at the end of your function
+          </li>
+         </ul>
+         <pre><code>julien@ubuntu:~/0x0f. Variadic functions$ cat 3-main.c
+#include "variadic_functions.h"
+
+/**
+ * main - check the code
+ *
+ * Return: Always 0.
+ */
+int main(void)
+{
+    print_all("ceis", 'B', 3, "stSchool");
+    return (0);
+}
+julien@ubuntu:~/0x0f. Variadic functions$ gcc -Wall -pedantic -Werror -Wextra -std=gnu89 3-main.c 3-print_all.c -o d
+julien@ubuntu:~/0x0f. Variadic functions$ ./d 
+B, 3, stSchool
+julien@ubuntu:~/0x0f. Variadic functions$ 
+</code></pre>
+        </div>
+        <div class="list-group">
+         <!-- Task URLs -->
+         <!-- Github information -->
+         <div class="list-group-item">
+          <p>
+           <strong>
+            Repo:
+           </strong>
+          </p>
+          <ul>
+           <li>
+            GitHub repository:
+            <code>
+             alx-low_level_programming
+            </code>
+           </li>
+           <li>
+            Directory:
+            <code>
+             0x10-variadic_functions
+            </code>
+           </li>
+           <li>
+            File:
+            <code>
+             3-print_all.c
+            </code>
+           </li>
+          </ul>
+         </div>
+         <!-- Self-paced manual review -->
+        </div>
+        <!-- Panel footer - Controls -->
+        <div class="panel-footer">
+         <div>
+          <button class="student_task_done btn btn-default btn-sm yes" data-task-id="966">
+           <span class="no">
+            <i aria-hidden="true" class="fa fa-square-o">
+            </i>
+           </span>
+           <span class="yes">
+            <i aria-hidden="true" class="fa fa-check-square-o">
+            </i>
+           </span>
+           <span class="pending">
+            <i aria-hidden="true" class="fa fa-spinner fa-pulse">
+            </i>
+           </span>
+           Done
+           <span class="no pending">
+            ?
+           </span>
+           <span class="yes">
+            !
+           </span>
+          </button>
+          <button class="users_done_for_task btn btn-default btn-sm" data-project-id="227" data-target="#task-966-users-done-modal" data-task-id="966" data-toggle="modal">
+           Help
+          </button>
+          <div class="modal fade users-done-modal" data-project-id="227" data-task-id="966" id="task-966-users-done-modal">
+           <div class="modal-dialog">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               Students who are done with "3. To be is a to be the value of a variable"
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="list-group">
+              </div>
+              <div class="spinner">
+               <div class="bounce1">
+               </div>
+               <div class="bounce2">
+               </div>
+               <div class="bounce3">
+               </div>
+              </div>
+              <div class="error">
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <button class="btn btn-default btn-sm" data-target="#task-test-correction-966-correction-modal" data-task-id="966" data-toggle="modal" id="task-num-3-check-code-btn">
+           Check your code
+          </button>
+          <div class="modal fade task_correction_modal student_modal" id="task-test-correction-966-correction-modal">
+           <div class="modal-dialog">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               Correction of "3. To be is a to be the value of a variable"
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="actions">
+               <center>
+                <div class="alert alert-info hidden">
+                </div>
+                <button class="btn btn-primary correction_request_test_send" data-task-id="966" name="button" type="submit">
+                 Start a new test
+                </button>
+                <button class="btn btn-default close-modal hidden" data-dismiss="modal" type="button">
+                 Close
+                </button>
+                <div class="spinner" style="display: none;">
+                 <div class="bounce1">
+                 </div>
+                 <div class="bounce2">
+                 </div>
+                 <div class="bounce3">
+                 </div>
+                </div>
+                <div class="error">
+                </div>
+                <div class="info">
+                </div>
+               </center>
+              </div>
+              <div class="result">
+              </div>
+              <div class="help">
+               <button data-task-id="966">
+                <i aria-hidden="true" class="fa fa-info-circle">
+                </i>
+               </button>
+               <div class="help-container" data-task-id="966">
+                <div class="check-line">
+                 <div class="check-inline requirement success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Requirement success
+                 </div>
+                 <div class="check-inline requirement fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Requirement fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline code success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Code success
+                 </div>
+                 <div class="check-inline code fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Code fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline efficiency success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Efficiency success
+                 </div>
+                 <div class="check-inline efficiency fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Efficiency fail
+                 </div>
+                </div>
+                <div class="check-line">
+                 <div class="check-inline answer success">
+                  <i aria-hidden="true" class="fa fa-check-circle">
+                  </i>
+                  Text answer success
+                 </div>
+                 <div class="check-inline answer fail">
+                  <i aria-hidden="true" class="fa fa-times-circle">
+                  </i>
+                  Text answer fail
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+            <!-- /.modal-content -->
+           </div>
+           <!-- /.modal-dialog -->
+          </div>
+          <button class="btn btn-default btn-sm" data-target="#container-specs-modal" data-toggle="modal">
+           <i aria-hidden="true" class="fa fa-terminal">
+           </i>
+           <span>
+            Get a sandbox
+           </span>
+          </button>
+          <button class="btn btn-default btn-sm" data-target="#task-qa-review-966-modal" data-task-id="966" data-toggle="modal">
+           QA Review
+          </button>
+          <div class="modal fade task_get_qa_review" data-correction-id="83111" data-task-id="966" id="task-qa-review-966-modal">
+           <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+             <div class="modal-header">
+              <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+               <span aria-hidden="true">
+                ×
+               </span>
+              </button>
+              <h4 class="modal-title">
+               3. To be is a to be the value of a variable
+              </h4>
+             </div>
+             <div class="modal-body">
+              <div class="spinner gap">
+               <div class="bounce1">
+               </div>
+               <div class="bounce2">
+               </div>
+               <div class="bounce3">
+               </div>
+              </div>
+              <div class="review-container">
+               <div class="review-corrector">
+               </div>
+               <div class="review-github">
+               </div>
+               <div class="review-percentage_down">
+               </div>
+               <ul class="review-checks list-group sm-gap">
+               </ul>
+               <div class="review-comment">
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="modal fade" id="container-specs-modal">
+       <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+         <div class="modal-header">
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+           <span aria-hidden="true">
+            ×
+           </span>
+          </button>
+          <h4 class="modal-title">
+           Recommended Sandbox
+          </h4>
+         </div>
+         <div class="modal-body">
+          <div data-react-cache-id="user_containers/ContainerSpecs-0" data-react-class="user_containers/ContainerSpecs" data-react-props='{"containerModelName":"Sandbox","containerSpecs":[{"description":"\u003cp\u003eBasic Ubuntu 20.04, with vim, emacs, curl, wget and all needed for Holberton Foundations\u003c/p\u003e\n","id":39,"name":"Ubuntu 20.04","container":{"containerId":"c1953039f04cf5f69dbf6709868730610788a5d61ccb065f0fd27bc31a037200","host":"c1953039f04c.f40acefe.alx-cod.online","id":5741,"password":"7327465a1450b104a641","ports":{"4000":49375,"443":49378,"5000":49374,"5001":49373,"8080":49371,"22":49380,"3000":49377,"8000":49372,"3306":49376,"80":49379},"url":"/user_containers/5741.json","webtermUrl":"/user_containers/5741/webterm"}}],"containersLimit":3,"csrfToken":"T8SyRnODJAXjfq54vJhito9FWTFnEU0CQYBOmjj9f/D91oXvRD+xmhmGhecskGs8OM6cdXKkalxrL5G6L1+Kxg==","startURI":"/user_containers/start.json"}'>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </article>
+   <div class="copyright">
+    Copyright © 2021 Holberton Inc, All rights reserved.
+   </div>
+  </main>
+  <button class="btn btn-primary" data-search-active="false" data-target="#search-modal" data-toggle="modal" id="search-button">
+   <i aria-hidden="true" class="fa fa-search">
+   </i>
+   <i aria-hidden="true" class="fa fa-window-minimize">
+   </i>
+  </button>
+  <div aria-labelledby="search-modal-label" class="modal fade" id="search-modal" role="dialog" tabindex="-1">
+   <div class="modal-dialog modal-md">
+    <div class="modal-content">
+     <div class="modal-header">
+      <div id="search-bar-container">
+       <input id="search-bar" name="hbtn-search-bar" placeholder="✨Start search by typing in this field✨" type="text"/>
+      </div>
+     </div>
+     <div class="modal-body">
+      <div class="spinner gap" id="modal-spinner">
+       <div class="bounce1">
+       </div>
+       <div class="bounce2">
+       </div>
+       <div class="bounce3">
+       </div>
+      </div>
+      <div id="search-results-container">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div aria-hidden="true" aria-labelledby="markdownGuideModalLabel" class="modal fade" id="markdownGuideModal" role="dialog" tabindex="-1">
+   <div class="modal-dialog modal-md">
+    <div class="modal-content">
+     <div class="modal-header">
+      <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+       <span aria-hidden="true">
+        ×
+       </span>
+      </button>
+      <h4 class="modal-title">
+       Markdown Guide
+      </h4>
+     </div>
+     <div class="modal-body">
+      <h4>
+       Emphasis
+      </h4>
+      <pre>**<strong>bold</strong>**
+*<em>italics</em>*
+~~<strike>strikethrough</strike>~~</pre>
+      <h4>
+       Headers
+      </h4>
+      <pre># Big header
+## Medium header
+### Small header
+#### Tiny header</pre>
+      <h4>
+       Lists
+      </h4>
+      <pre>* Generic list item
+* Generic list item
+* Generic list item
+
+1. Numbered list item
+2. Numbered list item
+3. Numbered list item</pre>
+      <h4>
+       Links
+      </h4>
+      <pre>[Text to display](http://www.example.com)</pre>
+      <h4>
+       Quotes
+      </h4>
+      <pre>&gt; This is a quote.
+&gt; It can span multiple lines!</pre>
+      <h4>
+       Images
+      </h4>
+      <p>
+       CSS style available:
+       <code>
+        width, height, opacity
+       </code>
+      </p>
+      <pre>![](http://www.example.com/image.jpg)
+![](http://www.example.com/image.jpg | width: 200px)
+![](http://www.example.com/image.jpg | height: 124px | width: 80px | opacity: 0.6)
+</pre>
+      <h4>
+       Tables
+      </h4>
+      <pre>| Column 1 | Column 2 | Column 3 |
+| -------- | -------- | -------- |
+| John     | Doe      | Male     |
+| Mary     | Smith    | Female   |
+
+<em>Or without aligning the columns...</em>
+
+| Column 1 | Column 2 | Column 3 |
+| -------- | -------- | -------- |
+| John | Doe | Male |
+| Mary | Smith | Female |
+</pre>
+      <h4>
+       Displaying code
+      </h4>
+      <pre>`var example = "hello!";`
+
+<em>Or spanning multiple lines...</em>
+
+```
+var example = "hello!";
+alert(example);
+```</pre>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create',
+            'UA-67152800-9',
+            'auto', {
+              userId: '1824'
+            }
+          );
+
+        ga('send', 'pageview');
+
+        $(document).ready(function() {
+          ga(function(tracker) {
+            var clientId = tracker.get('clientId');
+            $('.ga-client-id').val(clientId);
+          });
+        });
+  </script>
+ </body>
+</html>
