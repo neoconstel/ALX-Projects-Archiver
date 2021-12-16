@@ -20,7 +20,7 @@ def domain_from_url(url):
         return url[:8 + url[8:].index('/')]
 
 
-url = "https://alx-intranet.hbtn.io/projects/227"
+url = "https://alx-intranet.hbtn.io/projects/current"
 browser_cookies = os.environ.get("ALX_COOKIES")
 cookies_jar = requests.cookies.RequestsCookieJar()
 
@@ -48,13 +48,26 @@ print(f"Number of cookies: {len(response.cookies)}")
 print(f"\n\ncookies: {response.cookies}")
 
 
-soup = BeautifulSoup(response.text, 'lxml')
-for link in soup.find_all("a"):
-    if not link.get("href").startswith("http"):
-        print(f"Link before: {link.get('href')}")
-        link['href'] = f"{domain_from_url(url)}{link.get('href')}"
-        print(f"Link after: {link.get('href')}")
+# soup = BeautifulSoup(response.text, 'lxml')
+# for link in soup.find_all("a"):
+#     if not link.get("href").startswith("http"):
+#         print(f"Link before: {link.get('href')}")
+#         link['href'] = f"{domain_from_url(url)}{link.get('href')}"
+#         print(f"Link after: {link.get('href')}")
 
-with open("response.html", 'w') as file:
-    file.write(soup.prettify())
+# with open("response.html", 'w') as file:
+#     file.write(soup.prettify())
+
+
+soup = BeautifulSoup(response.text, 'lxml')
+project_sections = soup.select(".panel.panel-default")
+for section in project_sections:
+    section_title = section.select_one("a").text.strip().replace('\n', '')
+    section_dir = f"alx_syllabus/{section_title}"
+    if not os.path.exists(section_dir):
+        os.makedirs(section_dir)
+
+    print(f"\n\n-------{section_title}-------")
+    for link in section.select("li a"):
+        print(link)
 
