@@ -3,6 +3,7 @@ import os
 
 
 def zip_contents(directory, zip_output_file, selected_paths=[]):
+    initial_working_directory = os.getcwd()
     os.chdir(directory)
     archive_paths = []
 
@@ -50,5 +51,7 @@ def zip_contents(directory, zip_output_file, selected_paths=[]):
                         ):
                 print(path)
                 archive.write(path)
-                
-
+    
+    # change back to initial working directory
+    os.chdir(initial_working_directory)
+    
