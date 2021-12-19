@@ -19,4 +19,5 @@ def get_alx_syllabus():
 
     zipper.zip_contents(scrape_output_directory, zip_output_file)
 
-    return render_template("alx_syllabus.html", zip_path=zip_output_file)
+    return render_template("alx_syllabus.html", zip_path=f"{scrape_output_directory}.zip")
+    
