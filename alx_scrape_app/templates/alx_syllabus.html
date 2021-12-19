@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}ALX Syllabus Scraper{% endblock title %}
 {% block content %}
-<h1>Scrape your ALX profile and download the syllabus in zipped format!</h1>
-<a href="/download/{{zip_path}}">Download Your Alx Syllabus!</a>
+<h1>ALX Project Syllabus Archiver</h1>
+<h4>Access your ALX profile and download the project syllabus in zipped format for offline reference!</h4>
+<hr>
+<form action="{{url_for('alx_scrape_view.get_alx_syllabus')}}" method="POST">
+    <input type="submit" value="Fetch ALX Projects">
+</form>
+{% if zip_path %}
+    <a href="/download/{{zip_path}}">Download Your Alx Syllabus!</a>
+{% endif %}
+
 {% endblock content %}
