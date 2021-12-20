@@ -3,3 +3,4 @@ scrape_data.dat
 __pycache__
 *.zip
 response.html
+venv
