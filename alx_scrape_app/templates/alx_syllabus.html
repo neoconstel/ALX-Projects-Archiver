@@ -25,6 +25,14 @@
         let display = document.createElement("h3");
         display.textContent = "Fetching ALX Projects. Should take less than 5 minutes."
         document.body.appendChild(display);
+
+        const colors = ["pink", "green", "orange", "cyan", "magenta", "purple"];
+
+        setInterval(
+            () => {
+                display.style.color = colors[Math.round(Math.random() * colors.length)]
+            }, 700
+        );
     }
 </script>
 {% endblock content %}
