@@ -7,9 +7,8 @@
 <form action="{{url_for('alx_scrape_view.get_alx_syllabus')}}" method="POST">
     <input class="fetch btn" type="submit" value="Fetch ALX Projects">
 </form>
-{% if zip_path %}
-    <a href="/download/{{zip_path}}">Download Your Alx Syllabus!</a>
-{% endif %}
+
+    <a class="download-link alx-zip" href="/download/{{zip_path}}">Download Your Alx Syllabus!</a>
 
 <script>
     body = document.querySelector("body");
