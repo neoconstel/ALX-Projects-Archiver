@@ -1,6 +1,8 @@
 from flask import Flask, render_template, send_file, redirect, url_for
 from alx_scrape_app.alx_scrape_view import alx_scrape_view
 import os
+import redis
+from rq import Queue
 
 app = Flask(__name__)
 app.register_blueprint(alx_scrape_view, url_prefix="")
