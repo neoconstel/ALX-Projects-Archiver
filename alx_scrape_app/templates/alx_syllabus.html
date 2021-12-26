@@ -4,11 +4,13 @@
 <h1>ALX Project Syllabus Archiver</h1>
 <h4>Access your ALX profile and download the project syllabus in zipped format for offline reference!</h4>
 <hr>
-<form action="{{url_for('alx_scrape_view.get_alx_syllabus')}}" method="POST">
+<form action="{{url_for('alx_scrape_view.archive_page')}}" method="POST">
     <input class="fetch btn" type="submit" value="Fetch ALX Projects">
 </form>
 
-    <a class="download-link alx-zip" href="/download/{{zip_path}}">Download Your Alx Syllabus!</a>
+    {% if status == "1" %}
+        <a class="download-link alx-zip" href="/download/{{zip_path}}">Download Your Alx Syllabus!</a>
+    {% endif %}
 
 <script>
     body = document.querySelector("body");
@@ -19,6 +21,7 @@
         body.style.backgroundColor = "pink";
         screenSaver();
     });
+
 
     function screenSaver(){
         let display = document.createElement("h3");
@@ -31,6 +34,29 @@
             () => {
                 display.style.color = colors[Math.round(Math.random() * colors.length)]
             }, 700
+        );
+
+        setInterval(
+            () => {
+                
+                //url = "https://api.npoint.io/006a2efa20333d50f33e";
+                const url = "http://127.0.0.1:5000/alx_syllabus_archiver/status";
+
+                const xhr = new XMLHttpRequest; // create the request object
+                xhr.open("GET", url); // opens for configuration but doesn't send request yet
+
+                xhr.responseType = "json"; //optional but sets response type as json instead of text
+                // xhr.responseType = "document";
+
+                // DO THIS to access the response. It can only be accessed in the onload event.
+                xhr.onload = () => {
+                    let status = parseInt(xhr.response["status"]);
+                    console.log(status);
+                };
+
+                xhr.send(); // actually send the request
+            },
+            1000
         );
     }
 </script>

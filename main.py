@@ -1,17 +1,13 @@
 from flask import Flask, render_template, send_file, redirect, url_for, jsonify
 from alx_scrape_app.alx_scrape_view import alx_scrape_view
 import os
-import redis
-from rq import Queue
+from flask_cors import CORS
+from alx_scrape_app.alx_scrape_view import r, q
+
 
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(alx_scrape_view, url_prefix="")
-
-try:
-    r = redis.from_url(os.environ.get("REDIS_URL"))
-except:
-    r = redis.Redis()
-q = Queue(connection=r, default_timeout=180)
 
 
 @app.route("/")
@@ -20,10 +16,15 @@ def home():
     # return render_template("alx_syllabus.html")
 
 
-@app.route("/fetch_status")
-def fetch_status():
-    status = r.get("fetch_status")
-    return jsonify(status=status)
+@app.route("/alx_syllabus_archiver/status")
+def status():
+    
+    status = r.get("status")
+    if status:
+        status = status.decode("ascii")
+        return jsonify(status=status)
+    else:
+        return None
 
 
 @app.route("/download/<file>")
