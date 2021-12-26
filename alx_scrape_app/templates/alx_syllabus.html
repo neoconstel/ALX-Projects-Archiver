@@ -75,6 +75,9 @@
         xhr.send(); // actually send the request
     }
 
+    if (linkGotten == false){
+        processResponse();
+    } 
     
     let responseTimer = setInterval(
         () => {
