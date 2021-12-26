@@ -29,6 +29,9 @@ def status():
 
 @app.route("/download/<file>")
 def download(file):
+    with open(file, "w+b") as output_file:
+        output_file.write(r.get("alx_zip"))
+
     return send_file(file, as_attachment=True)
 
 
