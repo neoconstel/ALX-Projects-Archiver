@@ -26,7 +26,7 @@ browser_cookies = os.environ.get("ALX_COOKIES")
 cookies_jar = requests.cookies.RequestsCookieJar()
 domain = domain_from_url(url)
 
-scrape_interval = 15  # Interval (in seconds) between requests sent.
+scrape_interval = 2  # Interval (in seconds) between requests sent.
 data_file = "scrape_data.dat"
 
 
