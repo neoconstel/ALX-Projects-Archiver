@@ -14,7 +14,7 @@ alx_scrape_view = Blueprint("alx_scrape_view", __name__, template_folder="templa
 
 def get_alx_syllabus(scrape_output_directory="alx_syllabus"):
 
-    r.set("status", 0)
+    r.set("status", 0)  # it is only 0 when scraping/zipping is going on. Initially None, and 1 when done.
     r.delete("alx_zip")
     r.delete("zip_path")
     

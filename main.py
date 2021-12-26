@@ -12,7 +12,7 @@ app.register_blueprint(alx_scrape_view, url_prefix="")
 
 @app.route("/")
 def home():
-    return redirect(f"{url_for('.alx_scrape_view.get_alx_syllabus')}")
+    return redirect(f"{url_for('.alx_scrape_view.archive_page')}")
     # return render_template("alx_syllabus.html")
 
 

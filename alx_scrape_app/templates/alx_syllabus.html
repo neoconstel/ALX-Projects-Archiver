@@ -17,47 +17,75 @@
     body.style.backgroundColor = "yellow";
 
     fetch_btn = document.querySelector(".fetch.btn");
-    fetch_btn.addEventListener("click", () => {
-        body.style.backgroundColor = "pink";
-        screenSaver();
-    });
+    //fetch_btn.addEventListener("click", () => {
+    //    body.style.backgroundColor = "pink";
+    //    screenSaver();
+    //});
 
+    let linkGotten = false;
 
-    function screenSaver(){
-        let display = document.createElement("h3");
-        display.textContent = "Fetching ALX Projects. Should take less than 5 minutes."
-        document.body.appendChild(display);
+    function processResponse(url="http://127.0.0.1:5000/alx_syllabus_archiver/status") {
+        const xhr = new XMLHttpRequest; // create the request object
+        xhr.open("GET", url); // opens for configuration but doesn't send request yet
+    
+        xhr.responseType = "json"; //optional but sets response type as json instead of text
+        // xhr.responseType = "document";
+    
+        // DO THIS to access the response. It can only be accessed in the onload event.
+        xhr.onload = () => {
+            //console.log(xhr.response);
+            if (xhr.response == null)
+            {
+                status = null;
+            }
+            else
+            {
+                status = xhr.response["status"];
+            }
+            console.log(status);
+            if (status == "0"){
+                let display = document.querySelector("h3.screen-saver");
+                if (display == null){
+                    display = document.createElement("h3");
+                    display.textContent = "Fetching ALX Projects. Should take less than 5 minutes."
+                    display.className = "screen-saver"
+                    document.body.appendChild(display);
 
-        const colors = ["pink", "green", "orange", "cyan", "magenta", "purple"];
+                    const colors = ["pink", "green", "orange", "cyan", "magenta", "purple"];
 
-        setInterval(
-            () => {
-                display.style.color = colors[Math.round(Math.random() * colors.length)]
-            }, 700
-        );
-
-        setInterval(
-            () => {
-                
-                //url = "https://api.npoint.io/006a2efa20333d50f33e";
-                const url = "http://127.0.0.1:5000/alx_syllabus_archiver/status";
-
-                const xhr = new XMLHttpRequest; // create the request object
-                xhr.open("GET", url); // opens for configuration but doesn't send request yet
-
-                xhr.responseType = "json"; //optional but sets response type as json instead of text
-                // xhr.responseType = "document";
-
-                // DO THIS to access the response. It can only be accessed in the onload event.
-                xhr.onload = () => {
-                    let status = parseInt(xhr.response["status"]);
-                    console.log(status);
-                };
-
-                xhr.send(); // actually send the request
-            },
-            1000
-        );
+                    setInterval(
+                        () => {
+                            display.style.color = colors[Math.round(Math.random() * colors.length)]
+                        }, 700
+                    );
+                }                
+            }
+            else if (status == "1"){
+                let display = document.querySelector("h3.screen-saver");
+                if (display != null){
+                    location.reload();
+                }
+                else{
+                    linkGotten = true;
+                }  
+            }
+            
+        };
+    
+        xhr.send(); // actually send the request
     }
+
+    
+    let responseTimer = setInterval(
+        () => {
+            if (linkGotten == false){
+                processResponse();
+            }            
+        },
+        5000
+    );
+    
+         
+
 </script>
 {% endblock content %}
