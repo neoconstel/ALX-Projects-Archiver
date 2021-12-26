@@ -8,7 +8,7 @@ from rq import Queue
 
 # redis_cache = redis.Redis()
 redis_cache = redis.from_url(os.environ.get("REDIS_URL"))
-q = Queue(connection=redis_cache, default_timeout=3600)
+queue = Queue(connection=redis_cache, default_timeout=3600)
 
 alx_scrape_view = Blueprint("alx_scrape_view", __name__, template_folder="templates", static_folder="static")
 
@@ -41,7 +41,7 @@ def archive_page():
         redis_cache.delete("alx_zip")
         redis_cache.delete("zip_path")
 
-        scrape_job = q.enqueue(get_alx_syllabus)
+        scrape_job = queue.enqueue(get_alx_syllabus)
         return redirect(f"{url_for('alx_scrape_view.archive_page')}")
 
     elif request.method == "GET":
