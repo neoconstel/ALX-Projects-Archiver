@@ -24,7 +24,10 @@
 
     let linkGotten = false;
 
-    function processResponse(url="http://127.0.0.1:5000/alx_syllabus_archiver/status") {
+    const localUrl = "http://127.0.0.1:5000/alx_syllabus_archiver/status";
+    const remoteUrl = "https://alx-archiver.herokuapp.com/alx_syllabus_archiver/status";
+
+    function processResponse(url=remoteUrl) {
         const xhr = new XMLHttpRequest; // create the request object
         xhr.open("GET", url); // opens for configuration but doesn't send request yet
     

@@ -6,8 +6,9 @@ from flask import Blueprint, render_template, request, redirect, url_for
 import redis
 from rq import Queue
 
-r = redis.Redis()
-q = Queue(connection=r, default_timeout=3600)
+# redis_cache = redis.Redis()
+redis_cache = redis.from_url(os.environ.get("REDIS_URL"))
+q = Queue(connection=redis_cache, default_timeout=3600)
 
 alx_scrape_view = Blueprint("alx_scrape_view", __name__, template_folder="templates", static_folder="static")
 
@@ -26,29 +27,29 @@ def get_alx_syllabus(scrape_output_directory="alx_syllabus"):
 
     zip_path = f"{scrape_output_directory}.zip"
 
-    r.set("status", 1)
+    redis_cache.set("status", 1)
     with open(zip_path, 'r+b') as file:
-        r.set("alx_zip", file.read())
+        redis_cache.set("alx_zip", file.read())
 
-    r.set("zip_path", zip_path)
+    redis_cache.set("zip_path", zip_path)
 
     
 @alx_scrape_view.route("/alx_syllabus_archiver", methods=["GET", "POST"])
 def archive_page():
     if request.method == "POST":
-        r.set("status", 0)  # it is only 0 when scraping/zipping is going on. Initially None, and 1 when done.
-        r.delete("alx_zip")
-        r.delete("zip_path")
+        redis_cache.set("status", 0)  # it is only 0 when scraping/zipping is going on. Initially None, and 1 when done.
+        redis_cache.delete("alx_zip")
+        redis_cache.delete("zip_path")
 
         scrape_job = q.enqueue(get_alx_syllabus)
         return redirect(f"{url_for('alx_scrape_view.archive_page')}")
 
     elif request.method == "GET":
-        status = r.get("status")
+        status = redis_cache.get("status")
         if status:
             status = status.decode()
 
-        zip_path = r.get("zip_path")
+        zip_path = redis_cache.get("zip_path")
         if zip_path:
             zip_path = zip_path.decode()
 
