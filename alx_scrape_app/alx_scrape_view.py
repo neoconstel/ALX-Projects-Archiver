@@ -4,7 +4,7 @@ from .alx_syllabus_scraper import *
 from flask import Blueprint, render_template, request, redirect, url_for
 
 import redis
-from rq import Queue
+from rq import Queue, Retry
 
 # redis_cache = redis.Redis()
 redis_cache = redis.from_url(os.environ.get("REDIS_URL"))
@@ -44,7 +44,7 @@ def archive_page():
         # first empty queue
         queue.empty()
         
-        scrape_job = queue.enqueue(get_alx_syllabus)
+        scrape_job = queue.enqueue(get_alx_syllabus, retry=Retry(max=3, interval=[10, 30, 60]))
         return redirect(f"{url_for('alx_scrape_view.archive_page')}")
 
     elif request.method == "GET":
