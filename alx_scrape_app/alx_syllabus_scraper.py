@@ -100,8 +100,9 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus"):
                     for project_link in project_soup.select("a"):
                         # if not project_link.get("href").startswith("http"):  # this line works same as the line below                      
                         if project_link.get("href").startswith("/rltoken"):   # but this is more specific, thus faster                     
-                            real_project_resource_url = web_session.get(f"{domain}{project_link.get('href')}", stream=True).url
+                            real_project_resource_url = web_session.get(f"{domain}{project_link.get('href')}").url
                             project_link["href"] = real_project_resource_url
+                            print(f"Resource URL: {domain}{project_link.get('href')}")
 
                     project_page.write(project_soup.prettify())
 
