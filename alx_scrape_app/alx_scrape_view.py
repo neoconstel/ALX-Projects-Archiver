@@ -41,6 +41,9 @@ def archive_page():
         redis_cache.delete("alx_zip")
         redis_cache.delete("zip_path")
 
+        # first empty queue
+        queue.empty()
+        
         scrape_job = queue.enqueue(get_alx_syllabus)
         return redirect(f"{url_for('alx_scrape_view.archive_page')}")
 
