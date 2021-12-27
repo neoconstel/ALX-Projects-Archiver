@@ -5,6 +5,8 @@ import os
 import json
 import time
 
+from requests.models import CONTENT_CHUNK_SIZE
+
 
 def split_cookies(full_browser_cookie):
     '''returns a list of tuples, each tuple containing the (name, value) of 
@@ -88,9 +90,19 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus"):
                 # proceed with scraping of project_url
                 with open(f"{section_dir}/{link_text}.html", 'w') as project_page:
                     project_soup = BeautifulSoup(web_session.get(project_url).text, 'lxml')
+
+                    # I initially used these lines, but they only give the absolute token url
+                    # for project_link in project_soup.select("a"):
+                    #     if not project_link.get("href").startswith("http"):
+                    #         project_link["href"] = f"{domain}{project_link.get('href')}"
+
+                    # these would give the true resource url
                     for project_link in project_soup.select("a"):
-                        if not project_link.get("href").startswith("http"):
-                            project_link["href"] = f"{domain}{project_link.get('href')}"
+                        # if not project_link.get("href").startswith("http"):  # this line works same as the line below                      
+                        if project_link.get("href").startswith("/rltoken"):   # but this is more specific, thus faster                     
+                            real_project_resource_url = web_session.get(f"{domain}{project_link.get('href')}", stream=True).url
+                            project_link["href"] = real_project_resource_url
+
                     project_page.write(project_soup.prettify())
 
                     # add to storage
@@ -104,4 +116,4 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus"):
             print(link)
 
     print("\n\nScraping Completed")
-
+    
