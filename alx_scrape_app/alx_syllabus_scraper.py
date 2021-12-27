@@ -101,11 +101,16 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus"):
                         # if not project_link.get("href").startswith("http"):  # this line works same as the line below                      
                         if project_link.get("href").startswith("/rltoken"):   # but this is more specific, thus faster
                             try:                     
-                                real_project_resource_url = web_session.get(f"{domain}{project_link.get('href')}").url
+                                real_project_resource_url = web_session.get(f"{domain}{project_link.get('href')}", timeout=20).url
                                 project_link["href"] = real_project_resource_url
-                                print(f"    > Resource URL: {project_link.get('href')}")
                             except:
-                                continue
+                                # in case it can't fetch the resource link. I encountered this problem for
+                                # twitter links, and that's because as a Nigerian my country's president has
+                                # banned our network from accessing anything twitter.
+                                # so in this case just take the absolute token url
+                                project_link["href"] = f"{domain}{project_link.get('href')}"
+                            else:
+                                print(f"    > Resource URL: {project_link.get('href')}")
 
                     project_page.write(project_soup.prettify())
 
