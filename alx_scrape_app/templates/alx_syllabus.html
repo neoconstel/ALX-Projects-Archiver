@@ -5,6 +5,10 @@
 <h4>Access your ALX profile and download the project syllabus in zipped format for offline reference!</h4>
 <hr>
 <form action="{{url_for('alx_scrape_view.archive_page')}}" method="POST">
+    <label for="custom-cookie">Custom Cookie: </label>
+    <input id="custom-cookie" type="text" name="custom-cookie">
+    <button class="clear btn" type="button">Clear</button>
+    <br>
     <input class="fetch btn" type="submit" value="Fetch ALX Projects">
 </form>
 
@@ -16,8 +20,13 @@
     body = document.querySelector("body");
     body.style.backgroundColor = "yellow";
 
-    fetch_btn = document.querySelector(".fetch.btn");
-    //fetch_btn.addEventListener("click", () => {
+    const clearBtn = document.querySelector(".clear.btn");
+    clearBtn.addEventListener("click", () => {
+        document.querySelector("#custom-cookie").value = "";
+    });
+
+    fetchBtn = document.querySelector(".fetch.btn");
+    //fetchBtn.addEventListener("click", () => {
     //    body.style.backgroundColor = "pink";
     //    screenSaver();
     //});
@@ -27,7 +36,9 @@
     const localUrl = "http://127.0.0.1:5000/alx_syllabus_archiver/status";
     const remoteUrl = "https://alx-archiver.herokuapp.com/alx_syllabus_archiver/status";
 
-    function processResponse(url=remoteUrl) {
+    let responseTimer, colorEffectTimer;
+
+    function processResponse(url=localUrl) {
         const xhr = new XMLHttpRequest; // create the request object
         xhr.open("GET", url); // opens for configuration but doesn't send request yet
     
@@ -46,7 +57,7 @@
                 status = xhr.response["status"];
             }
             console.log(status);
-            if (status == "0"){
+            if (status == "0"){ // fetching in progress
                 let display = document.querySelector("h3.screen-saver");
                 if (display == null){
                     display = document.createElement("h3");
@@ -56,14 +67,14 @@
 
                     const colors = ["pink", "green", "orange", "cyan", "magenta", "purple"];
 
-                    setInterval(
+                    colorEffectTimer = setInterval(
                         () => {
                             display.style.color = colors[Math.round(Math.random() * colors.length)]
                         }, 700
                     );
                 }                
             }
-            else if (status == "1"){
+            else if (status == "1"){ // fetching successfully completed
                 let display = document.querySelector("h3.screen-saver");
                 if (display != null){
                     location.reload();
@@ -71,6 +82,18 @@
                 else{
                     linkGotten = true;
                 }  
+            }
+            else if (status == "-1"){ // fetching failed
+                let display = document.querySelector("h3.screen-saver");
+                if (display == null){
+                    display = document.createElement("h3");
+                    display.className = "screen-saver"
+                    document.body.appendChild(display);
+                }
+                display.textContent = "Error occured. Ensure custom cookie is valid!";
+                display.style.color = "red";
+                clearInterval(colorEffectTimer);
+                clearInterval(responseTimer);
             }
             
         };
@@ -82,7 +105,7 @@
         processResponse();
     } 
     
-    let responseTimer = setInterval(
+    responseTimer = setInterval(
         () => {
             if (linkGotten == false){
                 processResponse();

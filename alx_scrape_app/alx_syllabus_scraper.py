@@ -32,7 +32,7 @@ scrape_interval = 2  # Interval (in seconds) between requests sent.
 data_file = "scrape_data.dat"
 
 
-def scrape_alx_syllabus(scrape_output_directory="alx_syllabus"):
+def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=browser_cookies):
 
     if not os.path.exists(data_file):
         open(data_file, 'w').close()
@@ -45,7 +45,7 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus"):
             "scraped_urls": []
             }
 
-    for cookie_pair in split_cookies(browser_cookies):
+    for cookie_pair in split_cookies(applied_cookies):
         cookie_name = cookie_pair[0]
         cookie_value = cookie_pair[1]
 
