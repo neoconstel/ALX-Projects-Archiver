@@ -6,8 +6,8 @@ from flask import Blueprint, render_template, request, redirect, url_for
 import redis
 from rq import Queue, Retry
 
-# redis_cache = redis.Redis()
-redis_cache = redis.from_url(os.environ.get("REDIS_URL"))
+# redis_cache = redis.Redis()  # for development while offline
+redis_cache = redis.from_url(os.environ.get("REDIS_URL"))  # for deployment
 queue = Queue(connection=redis_cache, default_timeout=3600)
 
 alx_scrape_view = Blueprint("alx_scrape_view", __name__, template_folder="templates", static_folder="static")

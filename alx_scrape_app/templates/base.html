@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock title %}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-    <script type="text/javascript" src="{{url_for('static', filename='index.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='index.js')}}"></script>    
     <style>
+    {% block style %}
         *{
             margin: 15px 0 15px;
         }
@@ -18,7 +19,8 @@
         hr{
             border-style: dotted;
         }
-    </style>
+    {% endblock style %}
+    </style>    
 </head>
 
 <body>

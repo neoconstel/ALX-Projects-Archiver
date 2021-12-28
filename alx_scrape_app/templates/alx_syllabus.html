@@ -1,13 +1,32 @@
 {% extends 'base.html' %}
 {% block title %}ALX Syllabus Archiver{% endblock title %}
+{% block style %}
+{{super()}}
+.cookie-container{
+    display: flex;    
+    justify-content: center;
+    gap: 5px;
+}
+.cookie-label{
+    flex: 0 0 auto;
+}
+.cookie-input{
+    flex: 0 1 auto;
+}
+.clear.btn{
+    flex: 0 0 auto;
+}
+{% endblock style %}
 {% block content %}
 <h1>ALX Project Syllabus Archiver</h1>
 <h4>Access your ALX profile and download the project syllabus in zipped format for offline reference!</h4>
 <hr>
 <form action="{{url_for('alx_scrape_view.archive_page')}}" method="POST">
-    <label for="custom-cookie">Custom Cookie: </label>
-    <input id="custom-cookie" type="text" name="custom-cookie">
-    <button class="clear btn" type="button">Clear</button>
+    <div class="cookie-container">
+        <label class="cookie-label" for="custom-cookie">Custom Cookie: </label>
+        <input class="cookie-input" id="custom-cookie" type="text" name="custom-cookie">
+        <button class="clear btn" type="button">Clear</button>
+    </div>
     <br>
     <input class="fetch btn" type="submit" value="Fetch ALX Projects">
 </form>
@@ -33,6 +52,7 @@
 
     let linkGotten = false;
 
+    // for development either offline or for deployment
     const localUrl = "http://127.0.0.1:5000/alx_syllabus_archiver/status";
     const remoteUrl = "https://alx-archiver.herokuapp.com/alx_syllabus_archiver/status";
 
