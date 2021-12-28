@@ -6,12 +6,15 @@
     display: flex;    
     justify-content: center;
     gap: 5px;
+    width: 400px;
+    margin: 0 auto;
 }
 .cookie-label{
     flex: 0 0 auto;
 }
 .cookie-input{
-    flex: 0 1 auto;
+    width: 50px;
+    flex: 1 1 0;
 }
 .clear.btn{
     flex: 0 0 auto;
@@ -27,7 +30,6 @@
         <input class="cookie-input" id="custom-cookie" type="text" name="custom-cookie">
         <button class="clear btn" type="button">Clear</button>
     </div>
-    <br>
     <input class="fetch btn" type="submit" value="Fetch ALX Projects">
 </form>
 
