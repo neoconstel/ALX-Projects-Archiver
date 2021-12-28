@@ -38,7 +38,7 @@
 
     let responseTimer, colorEffectTimer;
 
-    function processResponse(url=localUrl) {
+    function processResponse(url=remoteUrl) {
         const xhr = new XMLHttpRequest; // create the request object
         xhr.open("GET", url); // opens for configuration but doesn't send request yet
     
