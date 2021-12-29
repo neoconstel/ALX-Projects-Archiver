@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 
 import redis
 from rq import Queue, Retry
+import time, datetime
 
 # redis_cache = redis.Redis()  # for development while offline
 redis_cache = redis.from_url(os.environ.get("REDIS_URL"))  # for deployment
@@ -63,8 +64,10 @@ def archive_page():
             status = status.decode()
             if status == "-1":  # error in previous attempt
                 # clear the error message for a fresh start
-                redis_cache.delete("status")
-                queue.empty()
+                date_time = datetime. datetime. fromtimestamp( time.time() + 10 )
+                queue.enqueue_at(datetime, redis_cache.delete, "status")
+                # redis_cache.delete("status")
+                # queue.empty()
 
 
         zip_path = redis_cache.get("zip_path")
