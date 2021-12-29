@@ -5,7 +5,7 @@
 .cookie-container{
     display: flex;    
     justify-content: center;
-    gap: 50px;
+    gap: 5px;
     margin: 0 auto;
 }
 .cookie-label{
@@ -18,10 +18,14 @@
 .clear.btn{
     flex: 0 0 auto;
 }
+.about-btn{
+    margin: 0;
+}
 {% endblock style %}
 {% block content %}
 <h1>ALX Project Syllabus Archiver</h1>
 <h4>Access your ALX profile and download the project syllabus in zipped format for offline reference!</h4>
+<button class="btn about-btn">About</button>
 <hr>
 <form action="{{url_for('alx_scrape_view.archive_page')}}" method="POST">
     <div class="cookie-container">
@@ -46,10 +50,22 @@
     });
 
     fetchBtn = document.querySelector(".fetch.btn");
-    //fetchBtn.addEventListener("click", () => {
-    //    body.style.backgroundColor = "pink";
-    //    screenSaver();
-    //});
+    
+    const aboutBtn = document.querySelector(".about-btn");
+    aboutBtn.addEventListener("click", () => {
+        alert(`Made for fun. Uses cookies to gain access. By default, my cookie is used when the custom-cookie input is left empty. Using your own cookie will allow you download your own projects.
+        github: neoconstel
+
+        -----Disclaimer-----
+        This is solely an experimental project for learning purposes. No one has access to your cookies or any personal/security information whatsoever, not even the developer. The sourcecode will be made available on github for full transparency.
+        
+        To use your cookies, you need to get it first so do this:
+        - With Chrome browser, open the chrome dev tools and navigate to the network tab (you can access chrome dev tools by right-clicking on any page and selecting "inspector").
+        - While in the network tab, login to your ALX dashboard. Some entries will appear below the network tab.
+        - In the "Name" column, click on any of the appeared entries and a "Headers" column will appear by the right.
+        - With the "Headers" column selected, scroll down to a section titled "Request Headers".
+        - In the "Request Headers" section, find an entry named "cookie". Highlight everything in this entry EXCEPT the "cookie:" heading. Then right-click and choose "copy", NOT "copy value". This is what you will use.`);   });
+
 
     let linkGotten = false;
 

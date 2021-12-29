@@ -52,7 +52,7 @@ def archive_page():
         # first empty queue
         queue.empty()
 
-        custom_cookie = request.form.get("custom-cookie")
+        custom_cookie = request.form.get("custom-cookie").strip()
         
         scrape_job = queue.enqueue(get_alx_syllabus, custom_cookie=custom_cookie, retry=Retry(max=3, interval=[10, 30, 60]))
         return redirect(f"{url_for('alx_scrape_view.archive_page')}")
