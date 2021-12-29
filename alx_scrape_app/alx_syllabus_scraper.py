@@ -5,8 +5,6 @@ import os
 import json
 import time
 
-from requests.models import CONTENT_CHUNK_SIZE
-
 
 def split_cookies(full_browser_cookie):
     '''returns a list of tuples, each tuple containing the (name, value) of 
@@ -91,12 +89,33 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
                 with open(f"{section_dir}/{link_text}.html", 'w') as project_page:
                     project_soup = BeautifulSoup(web_session.get(project_url).text, 'lxml')
 
-                    # I initially used these lines, but they only give the absolute token url
-                    # for project_link in project_soup.select("a"):
-                    #     if not project_link.get("href").startswith("http"):
-                    #         project_link["href"] = f"{domain}{project_link.get('href')}"
+                    # replace css online links with offline css files
 
-                    # these would give the true resource url
+                    css_dir = f"{section_dir}/css"
+                    if not os.path.exists(css_dir):
+                        os.makedirs(css_dir)
+
+                    for css_link in project_soup.select("link"):
+                        # first ensure the css href is an absolute URL or convert it
+                        if not css_link.get("href").startswith("http"):
+                            css_link["href"] = f"{domain}{css_link.get('href')}"
+
+                        # fetch the css online content, create a filename with the URL and write css content
+                        css = web_session.get(css_link.get("href")).text                        
+                        css_filename = css_link.get("href").replace(' ', '_').replace('/', '-')
+                        css_path = f"{css_dir}/{css_filename}"
+                        with open(css_path, "w") as css_file:
+                            css_file.write(css)
+
+                        # edit link href in the html page
+                        css_rel_path = f"{os.path.basename(os.path.dirname(css_path))}/{css_filename}"
+                        css_link["href"] = css_rel_path
+
+                        print(f" > CSS: {css_filename}")
+                        
+                    #---------------------
+
+                    # replace token URLs with the true resource URLs
                     for project_link in project_soup.select("a"):
                         # if not project_link.get("href").startswith("http"):  # this line works same as the line below                      
                         if project_link.get("href").startswith("/rltoken"):   # but this is more specific, thus faster
@@ -126,3 +145,6 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
     print("\n\nScraping Completed")
     
+
+if __name__ == "__main__":
+    scrape_alx_syllabus()
