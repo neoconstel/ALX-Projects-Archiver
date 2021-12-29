@@ -61,7 +61,8 @@ def archive_page():
     elif request.method == "GET":
         status = redis_cache.get("status")
         if status:
-            status = status.decode()
+            if type(status) == type("1".encode()): # is status is of <bytes> type
+                status = status.decode()
             if status == "-1":  # error in previous attempt
                 # clear the error message for a fresh start
                 redis_cache.delete("status")
