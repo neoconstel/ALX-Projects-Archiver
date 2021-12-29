@@ -66,7 +66,7 @@ def archive_page():
                 # clear the error message for a fresh start
                 func_del_cache = lambda f: redis_cache.delete(f)
                 date_time = datetime.datetime.fromtimestamp(time.time() + 10 )
-                queue.enqueue_at(date_time, func_del_cache, "status")
+                queue.enqueue(func_del_cache, "status")
                 # redis_cache.delete("status")
                 # queue.empty()
 
