@@ -64,9 +64,9 @@ def archive_page():
             status = status.decode()
             if status == "-1":  # error in previous attempt
                 # clear the error message for a fresh start
-                func_del_cache = lambda f: redis_cache.delete("status")
+                func_del_cache = lambda f: redis_cache.delete(f)
                 date_time = datetime.datetime.fromtimestamp(time.time() + 10 )
-                queue.enqueue_at(date_time, func_del_cache)
+                queue.enqueue_at(date_time, func_del_cache, "status")
                 # redis_cache.delete("status")
                 # queue.empty()
 
