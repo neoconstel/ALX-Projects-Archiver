@@ -14,6 +14,11 @@ queue = Queue(connection=redis_cache, default_timeout=3600)
 alx_scrape_view = Blueprint("alx_scrape_view", __name__, template_folder="templates", static_folder="static")
 
 
+def delete_cache_stat():
+    global redis_cache
+    redis_cache.delete("status")
+
+
 def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus"):
 
     try:
@@ -64,9 +69,8 @@ def archive_page():
             status = status.decode()
             if status == "-1":  # error in previous attempt
                 # clear the error message for a fresh start
-                func_del_cache = lambda f: redis_cache.delete(f)
                 date_time = datetime.datetime.fromtimestamp(time.time() + 10 )
-                queue.enqueue(func_del_cache, "status")
+                queue.enqueue_at(date_time, delete_cache_stat, "status")
                 # redis_cache.delete("status")
                 # queue.empty()
 
