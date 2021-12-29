@@ -62,6 +62,9 @@ def archive_page():
         status = redis_cache.get("status")
         if status:
             status = status.decode()
+            if status == "-1":  # error in previous attempt
+                # clear the error message for a fresh start
+                redis_cache.delete("status")
 
 
         zip_path = redis_cache.get("zip_path")
