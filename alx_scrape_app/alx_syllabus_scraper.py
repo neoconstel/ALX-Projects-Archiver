@@ -30,7 +30,7 @@ scrape_interval = 2  # Interval (in seconds) between requests sent.
 data_file = "scrape_data.dat"
 
 
-def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=browser_cookies):
+def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=browser_cookies, include_css=True, include_js=False):
 
     if not os.path.exists(data_file):
         open(data_file, 'w').close()
@@ -91,29 +91,71 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
                     # replace css online links with offline css files
 
-                    css_dir = f"{section_dir}/css"
-                    if not os.path.exists(css_dir):
-                        os.makedirs(css_dir)
+                    if include_css:
+                        css_dir = f"{section_dir}/css"
+                        if not os.path.exists(css_dir):
+                            os.makedirs(css_dir)
 
-                    for css_link in project_soup.select("link"):
-                        # first ensure the css href is an absolute URL or convert it
-                        if not css_link.get("href").startswith("http"):
-                            css_link["href"] = f"{domain}{css_link.get('href')}"
+                        for css_link in project_soup.select("link"):
+                            # first ensure the css href is an absolute URL or convert it
+                            href = css_link.get("href")
+                            if href:
+                                if not href.startswith("http"):
+                                    css_link["href"] = f"{domain}{css_link.get('href')}"
+                                    href = css_link.get("href")
 
-                        # fetch the css online content, create a filename with the URL and write css content
-                        css = web_session.get(css_link.get("href")).text                        
-                        css_filename = css_link.get("href").replace(' ', '_').replace('/', '-')
-                        css_path = f"{css_dir}/{css_filename}"
-                        with open(css_path, "w") as css_file:
-                            css_file.write(css)
+                                # fetch the css online content, create a filename with the URL and write css content
+                                css = web_session.get(href).text                        
+                                css_filename = href.replace(' ', '_').replace('/', '-')
+                                css_path = f"{css_dir}/{css_filename}"
+                                with open(css_path, "w") as css_file:
+                                    css_file.write(css)
 
-                        # edit link href in the html page
-                        css_rel_path = f"{os.path.basename(os.path.dirname(css_path))}/{css_filename}"
-                        css_link["href"] = css_rel_path
+                                # edit link href in the html page
+                                css_rel_path = f"{os.path.basename(os.path.dirname(css_path))}/{css_filename}"
+                                css_link["href"] = css_rel_path
 
-                        print(f" > CSS: {css_filename}")
+                                print(f" > CSS: {css_filename}")
                         
                     #---------------------
+
+                    # replace script online src with offline js files
+
+                    if include_js:
+                        scripts_dir = f"{section_dir}/scripts"
+                        if not os.path.exists(scripts_dir):
+                            os.makedirs(scripts_dir)
+
+                        for script in project_soup.select("script"):
+                            # first ensure the script src is an absolute URL or convert it
+                            src = script.get("src")
+                            if src:
+                                if not src.startswith("http"):
+                                    script["src"] = f"{domain}{src}"
+                                    src = script.get("src")
+
+                                # fetch the script online content, create a filename with the URL and write js content
+                                js = web_session.get(src).text                        
+                                js_filename = src.replace(' ', '_').replace('/', '-')
+                                js_path = f"{scripts_dir}/{js_filename}"
+                                with open(js_path, "w") as js_file:
+                                    js_file.write(js)
+
+                                # edit script src in the html page
+                                js_rel_path = f"{os.path.basename(os.path.dirname(js_path))}/{js_filename}"
+                                script["src"] = js_rel_path
+
+                                print(f" > JS: {js_filename}")
+
+                    else: # don't include js, so erase all web srcs to avoid
+                        # trying to connect to the internet while opening the 
+                        # offline html
+                        for script in project_soup.select("script"):
+                            src = script.get("src")
+                            if src:
+                                script["src"] = ""
+
+                    # --------------------------------
 
                     # replace token URLs with the true resource URLs
                     for project_link in project_soup.select("a"):
