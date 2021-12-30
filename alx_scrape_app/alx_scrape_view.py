@@ -32,6 +32,9 @@ def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus", incl
         zipper.zip_contents(scrape_output_directory, zip_output_file)
 
         zip_path = f"{scrape_output_directory}.zip"
+        
+        # flush first to be sure of maximum memory availability
+        redis_cache.flushdb()
 
         redis_cache.set("status", 1)
         with open(zip_path, 'r+b') as file:
