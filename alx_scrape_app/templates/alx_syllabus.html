@@ -49,7 +49,7 @@
         document.querySelector("#custom-cookie").value = "";
     });
 
-    fetchBtn = document.querySelector(".fetch.btn");
+    const fetchBtn = document.querySelector(".fetch.btn");
     
     const aboutBtn = document.querySelector(".about-btn");
     aboutBtn.addEventListener("click", () => {
@@ -95,6 +95,9 @@
             }
             console.log(status);
             if (status == "0"){ // fetching in progress
+                // disable fetch button for now
+                fetchBtn.disabled = true;
+
                 let display = document.querySelector("h3.screen-saver");
                 if (display == null){
                     display = document.createElement("h3");
@@ -112,6 +115,9 @@
                 }                
             }
             else if (status == "1"){ // fetching successfully completed
+                // enable fetch button again
+                fetchBtn.disabled = false;
+
                 let display = document.querySelector("h3.screen-saver");
                 if (display != null){
                     location.reload();
