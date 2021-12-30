@@ -46,9 +46,10 @@ def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus"):
 @alx_scrape_view.route("/alx_syllabus_archiver", methods=["GET", "POST"])
 def archive_page():
     if request.method == "POST":
+        redis_cache.flushdb()
         redis_cache.set("status", 0)  # it is only 0 when scraping/zipping is going on. Initially None, and 1 when done.
-        redis_cache.delete("alx_zip")
-        redis_cache.delete("zip_path")
+        # redis_cache.delete("alx_zip")
+        # redis_cache.delete("zip_path")
 
         # first empty queue
         queue.empty()
