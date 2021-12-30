@@ -15,27 +15,32 @@ alx_scrape_view = Blueprint("alx_scrape_view", __name__, template_folder="templa
 
 
 def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus"):
+
+    try:
     
-    zip_output_file = f"{os.path.abspath(scrape_output_directory)}.zip"
+        zip_output_file = f"{os.path.abspath(scrape_output_directory)}.zip"
 
-    if not custom_cookie:
-        scrape_alx_syllabus(scrape_output_directory=scrape_output_directory)
-    else:
-        scrape_alx_syllabus(scrape_output_directory=scrape_output_directory, applied_cookies=custom_cookie)
+        if not custom_cookie:
+            scrape_alx_syllabus(scrape_output_directory=scrape_output_directory)
+        else:
+            scrape_alx_syllabus(scrape_output_directory=scrape_output_directory, applied_cookies=custom_cookie)
 
-    # delete any previous zipped output file
-    if os.path.exists(zip_output_file):
-        os.remove(zip_output_file)
+        # delete any previous zipped output file
+        if os.path.exists(zip_output_file):
+            os.remove(zip_output_file)
 
-    zipper.zip_contents(scrape_output_directory, zip_output_file)
+        zipper.zip_contents(scrape_output_directory, zip_output_file)
 
-    zip_path = f"{scrape_output_directory}.zip"
+        zip_path = f"{scrape_output_directory}.zip"
 
-    redis_cache.set("status", 1)
-    with open(zip_path, 'r+b') as file:
-        redis_cache.set("alx_zip", file.read())
+        redis_cache.set("status", 1)
+        with open(zip_path, 'r+b') as file:
+            redis_cache.set("alx_zip", file.read())
 
-    redis_cache.set("zip_path", zip_path)
+        redis_cache.set("zip_path", zip_path)
+
+    except:
+        redis_cache.set("status", -1) # error occured
 
     
 @alx_scrape_view.route("/alx_syllabus_archiver", methods=["GET", "POST"])
