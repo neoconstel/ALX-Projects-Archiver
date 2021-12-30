@@ -127,6 +127,9 @@
                 }  
             }
             else if (status == "-1"){ // fetching failed
+                // enable fetch button again
+                fetchBtn.disabled = false;
+                
                 let display = document.querySelector("h3.screen-saver");
                 if (display == null){
                     display = document.createElement("h3");
