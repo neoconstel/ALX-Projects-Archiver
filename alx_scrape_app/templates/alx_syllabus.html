@@ -96,7 +96,7 @@
             console.log(status);
             if (status == "0"){ // fetching in progress
                 // disable fetch button for now
-                fetchBtn.disabled = true;
+                //fetchBtn.disabled = true;
 
                 let display = document.querySelector("h3.screen-saver");
                 if (display == null){
@@ -129,7 +129,7 @@
             else if (status == "-1"){ // fetching failed
                 // enable fetch button again
                 fetchBtn.disabled = false;
-                
+
                 let display = document.querySelector("h3.screen-saver");
                 if (display == null){
                     display = document.createElement("h3");
