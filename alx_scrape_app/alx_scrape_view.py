@@ -14,16 +14,16 @@ queue = Queue(connection=redis_cache, default_timeout=3600)
 alx_scrape_view = Blueprint("alx_scrape_view", __name__, template_folder="templates", static_folder="static")
 
 
-def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus"):
+def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus", include_css=True):
 
     try:
     
         zip_output_file = f"{os.path.abspath(scrape_output_directory)}.zip"
 
         if not custom_cookie:
-            scrape_alx_syllabus(scrape_output_directory=scrape_output_directory, include_css=True)
+            scrape_alx_syllabus(scrape_output_directory=scrape_output_directory, include_css=include_css)
         else:
-            scrape_alx_syllabus(scrape_output_directory=scrape_output_directory, applied_cookies=custom_cookie, include_css=True)
+            scrape_alx_syllabus(scrape_output_directory=scrape_output_directory, applied_cookies=custom_cookie, include_css=include_css)
 
         # delete any previous zipped output file
         if os.path.exists(zip_output_file):
