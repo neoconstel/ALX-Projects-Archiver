@@ -23,7 +23,7 @@ def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus"):
         if not custom_cookie:
             scrape_alx_syllabus(scrape_output_directory=scrape_output_directory, include_css=True)
         else:
-            scrape_alx_syllabus(scrape_output_directory=scrape_output_directory, applied_cookies=custom_cookie, include_css=False)
+            scrape_alx_syllabus(scrape_output_directory=scrape_output_directory, applied_cookies=custom_cookie, include_css=True)
 
         # delete any previous zipped output file
         if os.path.exists(zip_output_file):
