@@ -1,5 +1,6 @@
 from zipfile import ZipFile
 import os
+import zipfile
 
 
 def zip_contents(directory, zip_output_file, selected_paths=[]):
@@ -16,7 +17,8 @@ def zip_contents(directory, zip_output_file, selected_paths=[]):
         print("File with same name and path as output path already exists!")
         return
 
-    with ZipFile(zip_output_file, "w") as archive:
+    with ZipFile(zip_output_file, "w",
+                                compression=zipfile.ZIP_DEFLATED) as archive:
 
         # ----operating on the FULL tree structure of given path------
         for dirpath, dirnames, filenames in os.walk("."):
