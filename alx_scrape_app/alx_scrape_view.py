@@ -62,18 +62,26 @@ def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus", incl
     
 @alx_scrape_view.route("/alx_syllabus_archiver", methods=["GET", "POST"])
 def archive_page():
-    if request.method == "POST":
-        redis_cache.flushdb()
-        redis_cache.set("status", 0)  # it is only 0 when scraping/zipping is going on. Initially None, and 1 when done.
-        # redis_cache.delete("alx_zip")
-        # redis_cache.delete("zip_path")
+    default_cookie_working = cookie_has_access()
 
-        # first empty queue
-        queue.empty()
+    if request.method == "POST":
 
         custom_cookie = request.form.get("custom-cookie").strip()
-        
-        scrape_job = queue.enqueue(get_alx_syllabus, custom_cookie=custom_cookie, retry=Retry(max=3, interval=[10, 30, 60]))
+        if custom_cookie:
+            custom_cookie_working = cookie_has_access(custom_cookie)
+
+        # start only if there is a working cookie
+        if custom_cookie_working or default_cookie_working:       
+
+            redis_cache.flushdb()
+            redis_cache.set("status", 0)  # it is only 0 when scraping/zipping is going on. Initially None, and 1 when done.
+            # redis_cache.delete("alx_zip")
+            # redis_cache.delete("zip_path")
+
+            # first empty queue
+            queue.empty()
+            
+            scrape_job = queue.enqueue(get_alx_syllabus, custom_cookie=custom_cookie, retry=Retry(max=3, interval=[10, 30, 60]))
         return redirect(f"{url_for('alx_scrape_view.archive_page')}")
 
     elif request.method == "GET":
@@ -107,6 +115,6 @@ def archive_page():
 
         return render_template("alx_syllabus.html", status=status, 
             zip_path=zip_path, trimester=trimester, max_trimester=max_trimester,
-            fetch_timestamp = fetch_timestamp)
+            fetch_timestamp = fetch_timestamp, default_cookie_working=default_cookie_working)
 
     

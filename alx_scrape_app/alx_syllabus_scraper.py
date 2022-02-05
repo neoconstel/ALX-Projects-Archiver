@@ -7,6 +7,8 @@ import os
 import json
 import time
 
+from sqlalchemy import false, true
+
 
 def split_cookies(full_browser_cookie):
     '''returns a list of tuples, each tuple containing the (name, value) of 
@@ -30,6 +32,25 @@ domain = domain_from_url(url)
 
 scrape_interval = 2  # Interval (in seconds) between requests sent.
 data_file = "scrape_data.dat"
+
+
+def cookie_has_access(cookies=browser_cookies):
+    test_session = requests.Session()
+    test_cookies_jar = requests.cookies.RequestsCookieJar()
+
+    for cookie_pair in split_cookies(cookies):
+        cookie_name = cookie_pair[0]
+        cookie_value = cookie_pair[1]
+
+        test_cookies_jar.set(cookie_name, cookie_value)
+
+    test_response = test_session.get(domain, cookies=test_cookies_jar)
+    test_soup = BeautifulSoup(test_response.text, 'lxml')
+    if test_soup.select_one("th[title='Section 1']"):
+        return True
+
+    return False
+
 
 
 def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", 
