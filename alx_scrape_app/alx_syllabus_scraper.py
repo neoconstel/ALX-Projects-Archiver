@@ -1,3 +1,5 @@
+from http import cookies
+from django.http import cookie
 import requests
 import requests.cookies
 from bs4 import BeautifulSoup
@@ -30,7 +32,8 @@ scrape_interval = 2  # Interval (in seconds) between requests sent.
 data_file = "scrape_data.dat"
 
 
-def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=browser_cookies, include_css=True, include_js=False):
+def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", 
+        applied_cookies=browser_cookies, include_css=True, include_js=False):
 
     if not os.path.exists(data_file):
         open(data_file, 'w').close()
@@ -40,7 +43,9 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
             scrape_data = json.load(save_file)
         except:
             scrape_data = {
-            "scraped_urls": []
+            "scraped_urls": [],
+            "trimester_last_updated": None,
+            "highest_trimester_accessed": None
             }
 
     for cookie_pair in split_cookies(applied_cookies):
@@ -57,16 +62,38 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
         print("couldn't get response")
         exit()
 
-    # --------cookie diagnosis--------
-    for cookie in response.cookies:
-        print(f"cookie domain: {cookie.domain}")
-        print(f"cookie name: {cookie.name}")
-        print(f"cookie value: {cookie.value}")
-        print("*" * 70)
+    # get the current trimester and set it in data
+    dashboard_html = web_session.get(domain, cookies=cookies_jar)
+    dashboard_soup = BeautifulSoup(dashboard_html.text, 'lxml')
+    trimester = 1
+    for i in range(4, 1, -1):
+        if dashboard_soup.select_one(f"th[title='Section {i}']"):
+            trimester = i
+            break
+    
+    print(f"\nTrimester: {trimester}\n")
+    scrape_data["trimester_last_updated"] = trimester
+    if not scrape_data.get("highest_trimester_accessed") or \
+                        trimester > scrape_data["highest_trimester_accessed"]:
+        scrape_data["highest_trimester_accessed"] = trimester
+    
+    print(f"Highest trimester accessed: {scrape_data['highest_trimester_accessed']}\n")
+    # ----------current/highest-accessed trimester set in data-----------
 
-    print(f"Number of cookies: {len(response.cookies)}")
-    print(f"\n\ncookies: {response.cookies}")
-    print('-' * 70)
+    
+    
+    
+
+    # --------cookie diagnosis--------
+    # for cookie in response.cookies:
+    #     print(f"cookie domain: {cookie.domain}")
+    #     print(f"cookie name: {cookie.name}")
+    #     print(f"cookie value: {cookie.value}")
+    #     print("*" * 70)
+
+    # print(f"Number of cookies: {len(response.cookies)}")
+    # print(f"\n\ncookies: {response.cookies}")
+    # print('-' * 70)
     # --------end cookie diagnosis------
 
     soup = BeautifulSoup(response.text, 'lxml')
@@ -175,7 +202,7 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
                     project_page.write(project_soup.prettify())
 
-                    # add to storage
+                    # update progress to storage
                     scrape_data["scraped_urls"].append(project_url)
                     with open(data_file, 'w') as save_file:
                         json.dump(scrape_data, save_file)
@@ -184,6 +211,10 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
                     time.sleep(scrape_interval)
 
             print(f"\n\n{link}")
+
+    # update all further data changes
+    with open(data_file, 'w') as save_file:
+        json.dump(scrape_data, save_file)
 
     print("\n\nScraping Completed")
     

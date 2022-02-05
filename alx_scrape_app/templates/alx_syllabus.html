@@ -3,7 +3,10 @@
 <h1>ALX Project Syllabus Archiver</h1>
 <h4>Access your ALX profile and download the project syllabus in zipped format for offline reference!</h4>
 <button class="btn about-btn">About</button>
-<hr>
+<hr> {% if trimester and max_trimester and fetch_timestamp %}
+<p>The last fetch occured on {{fetch_timestamp}} and fetched projects up to: {{trimester}} trimester</p>
+<p>Highest project level fetched to date: {{max_trimester}} trimester</p>
+{% endif %}
 <form action="{{url_for('alx_scrape_view.archive_page')}}" method="POST">
     <div class="cookie-container">
         <label class="cookie-label" for="custom-cookie">Custom Cookie: </label>
@@ -52,7 +55,7 @@
 
     let responseTimer, colorEffectTimer;
 
-    function processResponse(url = remoteUrl) {
+    function processResponse(url = localUrl) {
         const xhr = new XMLHttpRequest; // create the request object
         xhr.open("GET", url); // opens for configuration but doesn't send request yet
 
