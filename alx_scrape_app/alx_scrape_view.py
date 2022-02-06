@@ -33,6 +33,8 @@ def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus", incl
 
         zip_path = f"{scrape_output_directory}.zip"
 
+        redis_cache.flushdb()
+        time.sleep(1)
         redis_cache.set("status", 1)
         with open(zip_path, 'r+b') as file:
             redis_cache.set("alx_zip", file.read())
@@ -46,7 +48,7 @@ def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus", incl
 @alx_scrape_view.route("/alx_syllabus_archiver", methods=["GET", "POST"])
 def archive_page():
     if request.method == "POST":
-        redis_cache.flushdb()
+        # redis_cache.flushdb()
         redis_cache.set("status", 0)  # it is only 0 when scraping/zipping is going on. Initially None, and 1 when done.
         # redis_cache.delete("alx_zip")
         # redis_cache.delete("zip_path")
