@@ -3,9 +3,7 @@
 <h1>ALX Project Syllabus Archiver</h1>
 <h4>Access your ALX profile and download the project syllabus in zipped format for offline reference!</h4>
 <button class="btn about-btn">About</button>
-<hr> {% if not default_cookie_works %}
-<h3>Unfortunately, the default cookie no longer works so you have to use your custom cookie</h3>
-{% endif %}
+<hr>
 <form action="{{url_for('alx_scrape_view.archive_page')}}" method="POST">
     <div class="cookie-container">
         <label class="cookie-label" for="custom-cookie">Custom Cookie: </label>
@@ -54,7 +52,7 @@
 
     let responseTimer, colorEffectTimer;
 
-    function processResponse(url = localUrl) {
+    function processResponse(url = remoteUrl) {
         const xhr = new XMLHttpRequest; // create the request object
         xhr.open("GET", url); // opens for configuration but doesn't send request yet
 
