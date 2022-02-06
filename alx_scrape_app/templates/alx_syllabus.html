@@ -2,7 +2,7 @@
 10px; flex: 0.3 1 0; } .clear.btn{ flex: 0 0 auto; } .about-btn{ margin: 0; } {% endblock style %} {% block content %}
 <h1>ALX Project Syllabus Archiver</h1>
 <h4>Access your ALX profile and download the project syllabus in zipped format for offline reference!</h4>
-<button class="btn about-btn">About</button>
+<button class="btn about-btn">READ ME!</button>
 <hr>
 <form action="{{url_for('alx_scrape_view.archive_page')}}" method="POST">
     <div class="cookie-container">
@@ -110,7 +110,7 @@
                 display.textContent = "Error occured. Ensure custom cookie is valid!";
                 display.style.color = "red";
                 clearInterval(colorEffectTimer);
-                //clearInterval(responseTimer);
+                // clearInterval(responseTimer);
             }
 
         };
