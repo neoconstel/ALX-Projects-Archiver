@@ -45,8 +45,7 @@ def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus", incl
     
 @alx_scrape_view.route("/alx_syllabus_archiver", methods=["GET", "POST"])
 def archive_page():
-    redis_cache.set("status", 0) # just act as though scraping begun
-    default_cookie_works = cookie_has_access()
+    default_cookie_works = False
 
     if request.method == "POST":
 
@@ -82,6 +81,8 @@ def archive_page():
         zip_path = redis_cache.get("zip_path")
         if zip_path:
             zip_path = zip_path.decode()
+
+        default_cookie_works = cookie_has_access()
 
         return render_template("alx_syllabus.html", status=status,
          zip_path=zip_path, default_cookie_works=default_cookie_works)
