@@ -39,22 +39,6 @@ def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus", incl
 
         redis_cache.set("zip_path", zip_path)
 
-        # set trimester data
-        with open(data_file) as save_file:
-            scrape_data = json.load(save_file)
-        trimester = scrape_data.get("trimester_last_updated")
-        max_trimester = scrape_data.get("highest_trimester_accessed")
-        if trimester and max_trimester:
-            nth_map = ["st", "nd", "rd", "th"]
-            trimester = f"{trimester}{nth_map[trimester - 1]}"
-            max_trimester = f"{max_trimester}{nth_map[max_trimester - 1]}"
-            redis_cache.set("trimester", trimester)
-            redis_cache.set("max_trimester", max_trimester)
-
-        # datetime of scrape
-        fetch_timestamp = datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")
-        redis_cache.set("fetch_timestamp", fetch_timestamp)
-
     except:
         redis_cache.set("status", -1) # error occured
 
@@ -76,21 +60,6 @@ def archive_page():
         return redirect(f"{url_for('alx_scrape_view.archive_page')}")
 
     elif request.method == "GET":
-        # get trimester data from redis_cache
-        trimester = redis_cache.get("trimester")
-        if trimester:
-            trimester = trimester.decode()
-        
-        max_trimester = redis_cache.get("max_trimester")
-        if max_trimester:
-            max_trimester = max_trimester.decode()
-
-        # timestamp data for last fetch
-        fetch_timestamp = redis_cache.get("fetch_timestamp")
-        if fetch_timestamp:
-            fetch_timestamp = fetch_timestamp.decode()
-
-        # status data
         status = redis_cache.get("status")
         if status:
             if type(status) == type("1".encode()): # is status is of <bytes> type
@@ -104,7 +73,6 @@ def archive_page():
         if zip_path:
             zip_path = zip_path.decode()
 
-        return render_template("alx_syllabus.html", status=status, zip_path=zip_path,
-        trimester=trimester, max_trimester=max_trimester, fetch_timestamp=fetch_timestamp)
+        return render_template("alx_syllabus.html", status=status, zip_path=zip_path)
 
     
