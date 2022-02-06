@@ -5,8 +5,6 @@ import os
 import json
 import time
 
-from sqlalchemy import false, true
-
 
 def split_cookies(full_browser_cookie):
     '''returns a list of tuples, each tuple containing the (name, value) of 
