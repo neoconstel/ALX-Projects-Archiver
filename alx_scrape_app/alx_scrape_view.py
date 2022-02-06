@@ -13,6 +13,8 @@ queue = Queue(connection=redis_cache, default_timeout=3600)
 
 alx_scrape_view = Blueprint("alx_scrape_view", __name__, template_folder="templates", static_folder="static")
 
+default_cookie_works = False
+
 
 def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus", include_css=True):
 
@@ -45,7 +47,6 @@ def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus", incl
     
 @alx_scrape_view.route("/alx_syllabus_archiver", methods=["GET", "POST"])
 def archive_page():
-    default_cookie_works = False
 
     if request.method == "POST":
 
