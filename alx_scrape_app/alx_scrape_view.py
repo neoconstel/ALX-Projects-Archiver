@@ -7,8 +7,8 @@ import redis
 from rq import Queue, Retry
 import time, datetime
 
-# redis_cache = redis.Redis()  # for development while offline
-redis_cache = redis.from_url(os.environ.get("REDIS_URL"))  # for deployment
+redis_cache = redis.Redis()  # for development while offline
+# redis_cache = redis.from_url(os.environ.get("REDIS_URL"))  # for deployment
 queue = Queue(connection=redis_cache, default_timeout=3600)
 
 alx_scrape_view = Blueprint("alx_scrape_view", __name__, template_folder="templates", static_folder="static")
@@ -45,18 +45,27 @@ def get_alx_syllabus(custom_cookie, scrape_output_directory="alx_syllabus", incl
     
 @alx_scrape_view.route("/alx_syllabus_archiver", methods=["GET", "POST"])
 def archive_page():
-    if request.method == "POST":
-        redis_cache.flushdb()
-        redis_cache.set("status", 0)  # it is only 0 when scraping/zipping is going on. Initially None, and 1 when done.
-        # redis_cache.delete("alx_zip")
-        # redis_cache.delete("zip_path")
+    default_cookie_works = cookie_has_access()
 
-        # first empty queue
-        queue.empty()
+    if request.method == "POST":
 
         custom_cookie = request.form.get("custom-cookie").strip()
-        
-        scrape_job = queue.enqueue(get_alx_syllabus, custom_cookie=custom_cookie, retry=Retry(max=3, interval=[10, 30, 60]))
+        custom_cookie_works = False
+        if custom_cookie:
+            custom_cookie_works = cookie_has_access(custom_cookie)
+
+        # clear previous data and start new fetch ONLY if there is working cookie
+        if default_cookie_works or custom_cookie_works:
+
+            redis_cache.flushdb()
+            redis_cache.set("status", 0)  # it is only 0 when scraping/zipping is going on. Initially None, and 1 when done.
+            # redis_cache.delete("alx_zip")
+            # redis_cache.delete("zip_path")
+
+            # first empty queue
+            queue.empty()
+
+            scrape_job = queue.enqueue(get_alx_syllabus, custom_cookie=custom_cookie, retry=Retry(max=3, interval=[10, 30, 60]))
         return redirect(f"{url_for('alx_scrape_view.archive_page')}")
 
     elif request.method == "GET":
@@ -73,6 +82,7 @@ def archive_page():
         if zip_path:
             zip_path = zip_path.decode()
 
-        return render_template("alx_syllabus.html", status=status, zip_path=zip_path)
+        return render_template("alx_syllabus.html", status=status,
+         zip_path=zip_path, default_cookie_works=default_cookie_works)
 
     
