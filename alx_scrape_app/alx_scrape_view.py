@@ -104,6 +104,7 @@ def archive_page():
         if zip_path:
             zip_path = zip_path.decode()
 
-        return render_template("alx_syllabus.html", status=status, zip_path=zip_path)
+        return render_template("alx_syllabus.html", status=status, zip_path=zip_path,
+        trimester=trimester, max_trimester=max_trimester, fetch_timestamp=fetch_timestamp)
 
     
