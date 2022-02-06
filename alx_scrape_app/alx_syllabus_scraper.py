@@ -1,5 +1,3 @@
-from http import cookies
-from django.http import cookie
 import requests
 import requests.cookies
 from bs4 import BeautifulSoup
