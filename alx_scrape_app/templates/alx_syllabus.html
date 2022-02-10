@@ -10,11 +10,11 @@
         <input class="cookie-input" id="custom-cookie" type="text" name="custom-cookie">
         <button class="clear btn" type="button">Clear</button>
     </div>
-    <input class="fetch btn" type="submit" value="Fetch ALX Projects">
+    <input class="fetch btn" type="submit" value="Fetch ALX Projects\n(Do This First)">
 </form>
 
 {% if status == "1" %}
-<a class="download-link alx-zip" href="/download/{{zip_path}}">Download Your Alx Syllabus!</a> {% endif %}
+<a class="download-link alx-zip" href="/download/{{zip_path}}">Download Fetched Alx Projects!</a> {% endif %}
 
 <script>
     body = document.querySelector("body");
