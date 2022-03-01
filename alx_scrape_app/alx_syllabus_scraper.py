@@ -160,7 +160,7 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
                     # replace token URLs with the true resource URLs
                     for project_link in project_soup.select("a"):
                         # if not project_link.get("href").startswith("http"):  # this line works same as the line below                      
-                        if project_link.get("href").startswith("/rltoken"):   # but this is more specific, thus faster
+                        if project_link.get("href") and project_link.get("href").startswith("/rltoken"):   # but this is more specific, thus faster
                             try:                     
                                 real_project_resource_url = web_session.get(f"{domain}{project_link.get('href')}", timeout=20).url
                                 project_link["href"] = real_project_resource_url
