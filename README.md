@@ -4,6 +4,7 @@ https://alx-archiver.herokuapp.com
 
 
 ### Updates
+- Cool new feature: Generates an offline html contents page where the projects are listed according to how they were released (very helpful if you want to study from beginning and follow up in sequence to date). The listing is in clickable link form, so you can easily navigate to the offline project file.
 - Zipped archive now compressed.
 
 ### Just to note:
