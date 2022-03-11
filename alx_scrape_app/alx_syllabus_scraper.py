@@ -44,18 +44,17 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
         except:
             scrape_data = {
             "scraped_urls": [],
-            "contents": {
-
-
-                },
+            "contents": [],
             "cookies_hash": hash(applied_cookies)
             }
 
     # if cookies are different from the previously used cookies, clear the
     # contents data -- as they could have conflicting timestamps and end up
-    # sorting the appearance of the projects wrongly
+    # sorting the appearance of the projects wrongly. Then replace stored
+    # cookie hash
     if hash(applied_cookies) != scrape_data["cookies_hash"]:
-        scrape_data["contents"] = {}
+        scrape_data["contents"] = []
+        scrape_data["cookies_hash"] = hash(applied_cookies)
 
     for cookie_pair in split_cookies(applied_cookies):
         cookie_name = cookie_pair[0]
@@ -72,17 +71,18 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
         exit()
 
     # --------cookie diagnosis--------
-    for cookie in response.cookies:
-        print(f"cookie domain: {cookie.domain}")
-        print(f"cookie name: {cookie.name}")
-        print(f"cookie value: {cookie.value}")
-        print("*" * 70)
+    # for cookie in response.cookies:
+    #     print(f"cookie domain: {cookie.domain}")
+    #     print(f"cookie name: {cookie.name}")
+    #     print(f"cookie value: {cookie.value}")
+    #     print("*" * 70)
 
-    print(f"Number of cookies: {len(response.cookies)}")
-    print(f"\n\ncookies: {response.cookies}")
-    print('-' * 70)
+    # print(f"Number of cookies: {len(response.cookies)}")
+    # # print(f"\n\ncookies: {response.cookies}")
+    # print('-' * 70)
     # --------end cookie diagnosis------
 
+    # '''
     soup = BeautifulSoup(response.text, 'lxml')
     project_sections = soup.select(".panel.panel-default")
     for section in project_sections:
@@ -112,7 +112,7 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
                 project_title = project_soup.select_one("h1").text
 
                 offline_contents_url = f'<a href="{section_title}/{link_text}.html">{project_title}</a>'
-                scrape_data["contents"][starting_date] = offline_contents_url
+                scrape_data["contents"].append([starting_date, offline_contents_url])
 
             if not project_url in scrape_data["scraped_urls"]:
                 # proceed with scraping of project_url                
@@ -213,19 +213,34 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
                     time.sleep(scrape_interval)
 
             print(f"\n\n{link}")
+    # '''
+
+    with open(data_file) as save_file:
+        try:
+            scrape_data = json.load(save_file)
+        except:
+            pass
 
     # CONTENTS file creation (for chronological order of projects and offline location)
     contents_path = f"{scrape_output_directory}/contents.html"
     with open(contents_path, "w") as contents_file:
-        chronological_epoch = sorted(scrape_data["contents"].keys())
+        #form of contents data: [ [epoch,epoch_url], [epoch,epoch_url], [epoch,epoch_url] ]
+        chronological_pairs = sorted(scrape_data["contents"], key=lambda x:x[0])
 
         contents_file.write(f"<br>\n")
         contents_file.write("<h1>Chronological order of Projects</h1>")
         contents_file.write(f"<br>\n")
-        contents_file.write("<h3>(Projects in the same day are not ordered)</h3>")
-        for epoch in chronological_epoch:
+        contents_file.write("<h3>(Projects of the same day are grouped together by the dashed lines)</h3>")
+
+        previous_epoch = ""
+        for epoch, epoch_url in chronological_pairs:
+            if previous_epoch and epoch != previous_epoch:
+                contents_file.write(f"<br>\n")
+                contents_file.write("-" * 72)
+            previous_epoch = epoch
+
             contents_file.write(f"<br>\n")
-            contents_file.write(scrape_data["contents"][epoch])       
+            contents_file.write(epoch_url)       
 
     print("\n\nScraping Completed")
     
