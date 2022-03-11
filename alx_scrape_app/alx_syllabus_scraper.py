@@ -57,7 +57,6 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
     if hash(applied_cookies) != scrape_data["cookies_hash"]:
         scrape_data["contents"] = {}
 
-    
     for cookie_pair in split_cookies(applied_cookies):
         cookie_name = cookie_pair[0]
         cookie_value = cookie_pair[1]
@@ -99,26 +98,25 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
             if not project_url.startswith("http"):
                 project_url = f"{domain}{project_url}"
 
+
+            project_page_path = f"{section_dir}/{link_text}.html"
+            project_soup = BeautifulSoup(web_session.get(project_url).text, 'lxml')
+            # Get project starting date and project title -- this would be used in sorting the order of the projects and creating a contents file
+            date_regex = re.compile("\d\d-\d\d-\d\d\d\d")
+            starting_date_match = re.search(date_regex, project_soup.select(".list-group-item")[2].text)
+            if starting_date_match:
+                starting_date = starting_date_match.group()
+                # convert to epoch
+                starting_date = dt.strptime(starting_date, "%m-%d-%Y").timestamp()
+
+                project_title = project_soup.select_one("h1").text
+
+                offline_contents_url = f'<a href="{section_title}/{link_text}.html">{project_title}</a>'
+                scrape_data["contents"][starting_date] = offline_contents_url
+
             if not project_url in scrape_data["scraped_urls"]:
-                # proceed with scraping of project_url
-                project_page_path = f"{section_dir}/{link_text}.html"
+                # proceed with scraping of project_url                
                 with open(project_page_path, 'w') as project_page:
-                    project_soup = BeautifulSoup(web_session.get(project_url).text, 'lxml')
-
-
-                    # Get project starting date and project title -- this would be used in sorting the order of the projects and creating a contents file
-                    date_regex = re.compile("\d\d-\d\d-\d\d\d\d")
-                    starting_date_match = re.search(date_regex, project_soup.select(".list-group-item")[2].text)
-                    if starting_date_match:
-                        starting_date = starting_date_match.group()
-                        # convert to epoch
-                        starting_date = dt.strptime(starting_date, "%m-%d-%Y").timestamp()
-
-                        project_title = project_soup.select_one("h1").text
-
-                        offline_contents_url = f'<a href="{section_title}/{link_text}.html">{project_title}</a>'
-                        scrape_data["contents"][starting_date] = offline_contents_url
-
 
                     # replace css online links with offline css files
 
