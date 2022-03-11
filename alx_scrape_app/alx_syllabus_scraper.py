@@ -23,6 +23,10 @@ def domain_from_url(url):
         return url[:8 + url[8:].index('/')]
 
 
+def re_symbolize_link(link):
+    return link.replace(' ', '_').replace('/', '-').replace('#','--')
+
+
 url = "https://alx-intranet.hbtn.io/projects/current"
 browser_cookies = os.environ.get("ALX_COOKIES")
 cookies_jar = requests.cookies.RequestsCookieJar()
@@ -93,7 +97,7 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
         print(f"\n\n-------{section_title}-------")
         for link in section.select("li a"):
-            link_text = link.text.replace(' ', '_').replace('/', '-')
+            link_text = re_symbolize_link(link.text)
             project_url = link.get("href")
             if not project_url.startswith("http"):
                 project_url = f"{domain}{project_url}"
@@ -135,7 +139,7 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
                                 # fetch the css online content, create a filename with the URL and write css content
                                 css = web_session.get(href).text                        
-                                css_filename = href.replace(' ', '_').replace('/', '-')
+                                css_filename = re_symbolize_link(href)
                                 css_path = f"{css_dir}/{css_filename}"
                                 with open(css_path, "w") as css_file:
                                     css_file.write(css)
@@ -165,7 +169,7 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
                                 # fetch the script online content, create a filename with the URL and write js content
                                 js = web_session.get(src).text                        
-                                js_filename = src.replace(' ', '_').replace('/', '-')
+                                js_filename = re_symbolize_link(src)
                                 js_path = f"{scripts_dir}/{js_filename}"
                                 with open(js_path, "w") as js_file:
                                     js_file.write(js)
