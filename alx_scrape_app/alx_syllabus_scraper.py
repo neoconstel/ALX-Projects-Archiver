@@ -70,9 +70,11 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
     web_session = requests.Session()
     response = web_session.get(url, cookies=cookies_jar)
-    if response.status_code != 200:
+    concepts_response = web_session.get("https://alx-intranet.hbtn.io/concepts", cookies=cookies_jar)
+    if response.status_code != 200 or concepts_response.status_code != 200:
         print("couldn't get response")
         exit()
+    
 
     # --------cookie diagnosis--------
     # for cookie in response.cookies:
@@ -87,11 +89,22 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
     # --------end cookie diagnosis------
 
     # '''
-    soup = BeautifulSoup(response.text, 'lxml')
-    project_sections = soup.select(".panel.panel-default")
-    for section in project_sections:
+    all_projects_soup = BeautifulSoup(response.text, 'lxml')
+    all_concepts_soup = BeautifulSoup(concepts_response.text, 'lxml')
+    concept_sections = [sect for sect in all_concepts_soup.select(".list-group-item")]
+    
+
+    project_sections = [sect for sect in all_projects_soup.select(".panel.panel-default")]
+    # new integration: merge concepts list into projects list and handle them together
+    all_sections = concept_sections + project_sections
+
+    for section in all_sections:
         section_title = section.select_one("a").text.strip().replace('\n', '')
-        section_dir = f"{scrape_output_directory}/{section_title}"
+        if section in project_sections:
+            section_dir = f"{scrape_output_directory}/projects/{section_title}"
+        elif section in concept_sections:
+            section_dir = f"{scrape_output_directory}/concepts/{section_title}"
+
         if not os.path.exists(section_dir):
             os.makedirs(section_dir)
 
@@ -107,7 +120,13 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
             project_soup = BeautifulSoup(web_session.get(project_url).text, 'lxml')
             # Get project starting date and project title -- this would be used in sorting the order of the projects and creating a contents file
             date_regex = re.compile("\d\d-\d\d-\d\d\d\d")
-            starting_date_match = re.search(date_regex, project_soup.select(".list-group-item")[2].text)
+
+            starting_date_match = None
+            try:
+                starting_date_match = re.search(date_regex, project_soup.select(".list-group-item")[2].text)
+            except:
+                pass
+            
             if starting_date_match:
                 starting_date = starting_date_match.group()
                 # convert to epoch
@@ -115,8 +134,12 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
                 project_title = project_soup.select_one("h1").text
 
-                offline_contents_url = f'<a href="{section_title}/{link_text}.html">{project_title}</a>'
+                offline_contents_url = f'<a href="projects/{section_title}/{link_text}.html">{project_title}</a>'
                 scrape_data["contents"].append([starting_date, offline_contents_url])
+
+                # update storage
+                with open(data_file, 'w') as save_file:
+                    json.dump(scrape_data, save_file)
 
             if not project_url in scrape_data["scraped_urls"]:
                 # proceed with scraping of project_url                
@@ -192,8 +215,10 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
                     # replace token URLs with the true resource URLs
                     for project_link in project_soup.select("a"):
-                        # if not project_link.get("href").startswith("http"):  # this line works same as the line below                      
-                        if project_link.get("href") and project_link.get("href").startswith("/rltoken"):   # but this is more specific, thus faster
+                        print(f"PROJECT LINK (resource/concept): {project_link}")
+                    
+
+                        if project_link.get("href") and project_link.get("href").startswith("/rltoken"):
                             try:                     
                                 real_project_resource_url = web_session.get(f"{domain}{project_link.get('href')}", timeout=20).url
                                 project_link["href"] = real_project_resource_url
@@ -205,6 +230,21 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
                                 project_link["href"] = f"{domain}{project_link.get('href')}"
                             else:
                                 print(f"    > Resource URL: {project_link.get('href')}")
+
+                        # do same for concepts URLs -- but replace with offline concepts path
+                        elif project_link.get("href") and re.search(re.compile("/concepts/(\d+)"), project_link.get("href")):
+
+                            concept_num = re.search(re.compile("/concepts/(\d+)"), project_link.get("href")).group(1)
+                            
+                            print(f"\nConcept {concept_num} being fetched\n")
+                          
+                            concept_sect = list(   filter(lambda sect: sect.select_one("a").get("href").endswith(f"/concepts/{concept_num}"), concept_sections)   )[0]
+                            concept_link_text = concept_sect.select_one("a").text
+                            print(f"Concept link text: {concept_link_text}")
+                            real_project_resource_url = f"../../concepts/{concept_link_text}/{re_symbolize_link(concept_link_text)}.html"
+
+                            project_link["href"] = real_project_resource_url
+                            
 
                     project_page.write(project_soup.prettify())
 
