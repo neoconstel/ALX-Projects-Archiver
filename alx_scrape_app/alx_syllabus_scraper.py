@@ -98,6 +98,8 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
     # new integration: merge concepts list into projects list and handle them together
     all_sections = concept_sections + project_sections
 
+    static_dir = f"{scrape_output_directory}/static_files"
+
     for section in all_sections:
         section_title = section.select_one("a").text.strip().replace('\n', '')
         if section in project_sections:
@@ -148,7 +150,7 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
                     # replace css online links with offline css files
 
                     if include_css:
-                        css_dir = f"{section_dir}/css"
+                        css_dir = f"{static_dir}/css"
                         if not os.path.exists(css_dir):
                             os.makedirs(css_dir)
 
@@ -160,25 +162,36 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
                                     css_link["href"] = f"{domain}{css_link.get('href')}"
                                     href = css_link.get("href")
 
-                                # fetch the css online content, create a filename with the URL and write css content
-                                css = web_session.get(href).text                        
+                                                      
                                 css_filename = re_symbolize_link(href)
                                 css_path = f"{css_dir}/{css_filename}"
-                                with open(css_path, "w") as css_file:
-                                    css_file.write(css)
+
+                                if not href in scrape_data["scraped_urls"]:
+                                    # fetch the css online content, create a filename with the URL and write css content
+                                    css = web_session.get(href).text 
+                                    with open(css_path, "w") as css_file:
+                                        css_file.write(css)
+                                    scrape_data["scraped_urls"].append(href)
+
+                                    # update data file
+                                    with open(data_file, 'w') as save_file:
+                                        json.dump(scrape_data, save_file)
+
+                                    # print(f"CSS path: {css_path}")
+                                    print(f" > CSS: {css_filename}")
 
                                 # edit link href in the html page
-                                css_rel_path = f"{os.path.basename(os.path.dirname(css_path))}/{css_filename}"
-                                css_link["href"] = css_rel_path
+                                css_path_in_html = f"../../static_files/{os.path.basename(os.path.dirname(css_path))}/{css_filename}"
+                                css_link["href"] = css_path_in_html
 
-                                print(f" > CSS: {css_filename}")
+                                
                         
                     #---------------------
 
                     # replace script online src with offline js files
 
                     if include_js:
-                        scripts_dir = f"{section_dir}/scripts"
+                        scripts_dir = f"{static_dir}/scripts"
                         if not os.path.exists(scripts_dir):
                             os.makedirs(scripts_dir)
 
@@ -190,18 +203,26 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
                                     script["src"] = f"{domain}{src}"
                                     src = script.get("src")
 
-                                # fetch the script online content, create a filename with the URL and write js content
-                                js = web_session.get(src).text                        
+                                                       
                                 js_filename = re_symbolize_link(src)
                                 js_path = f"{scripts_dir}/{js_filename}"
-                                with open(js_path, "w") as js_file:
-                                    js_file.write(js)
+                                if not src in scrape_data["scraped_urls"]:
+                                    # fetch the script online content, create a filename with the URL and write js content
+                                    js = web_session.get(src).text 
+                                    with open(js_path, "w") as js_file:
+                                        js_file.write(js)
+                                    scrape_data["scraped_urls"].append(src)
+
+                                    # update data file
+                                    with open(data_file, 'w') as save_file:
+                                        json.dump(scrape_data, save_file)
+
+                                    print(f" > JS: {js_filename}")
 
                                 # edit script src in the html page
-                                js_rel_path = f"{os.path.basename(os.path.dirname(js_path))}/{js_filename}"
-                                script["src"] = js_rel_path
+                                js_path_in_html = f"../../static_files/{os.path.basename(os.path.dirname(js_path))}/{js_filename}"
+                                script["src"] = js_path_in_html
 
-                                print(f" > JS: {js_filename}")
 
                     else: # don't include js, so erase all web srcs to avoid
                         # trying to connect to the internet while opening the 
@@ -215,7 +236,6 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
                     # replace token URLs with the true resource URLs
                     for project_link in project_soup.select("a"):
-                        print(f"PROJECT LINK (resource/concept): {project_link}")
                     
 
                         if project_link.get("href") and project_link.get("href").startswith("/rltoken"):
@@ -236,12 +256,11 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
 
                             concept_num = re.search(re.compile("/concepts/(\d+)"), project_link.get("href")).group(1)
                             
-                            print(f"\nConcept {concept_num} being fetched\n")
+                            print(f"\nFetching Concept {concept_num}\n")
                           
                             concept_sect = list(   filter(lambda sect: sect.select_one("a").get("href").endswith(f"/concepts/{concept_num}"), concept_sections)   )[0]
-                            concept_link_text = concept_sect.select_one("a").text
-                            print(f"Concept link text: {concept_link_text}")
-                            real_project_resource_url = f"../../concepts/{concept_link_text}/{re_symbolize_link(concept_link_text)}.html"
+                            concept_link_text = concept_sect.select_one("a").text.strip().replace('\n', '')
+                            real_project_resource_url = f"../../concepts/{concept_link_text.replace('/', '-')}/{re_symbolize_link(concept_link_text)}.html"
 
                             project_link["href"] = real_project_resource_url
                             
