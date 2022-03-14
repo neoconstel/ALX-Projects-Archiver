@@ -101,7 +101,7 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
     static_dir = f"{scrape_output_directory}/static_files"
 
     for section in all_sections:
-        section_title = section.select_one("a").text.strip().replace('\n', '')
+        section_title = section.select_one("a").text.strip().replace('\n', '').replace('/', '-')
         if section in project_sections:
             section_dir = f"{scrape_output_directory}/projects/{section_title}"
         elif section in concept_sections:
