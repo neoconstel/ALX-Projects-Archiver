@@ -8,12 +8,27 @@ import re
 from datetime import datetime as dt
 
 
-def split_cookies(full_browser_cookie):
-    '''returns a list of tuples, each tuple containing the (name, value) of 
-    each cookie'''
-    cookie_list = [(pair.split("=")[0], pair.split("=")[1])
-                   for pair in full_browser_cookie.split("; ")]
-    return cookie_list
+def cookies_to_cookiesjar(full_browser_cookie):
+    '''takes the complete string of browser cookies and returns a valid cookiejar 
+    object which can be used to authenticate a requests session object'''
+
+    def split_cookies(full_browser_cookie):
+        '''returns a list of tuples, each tuple containing the (name, value) of 
+        each cookie'''
+        cookie_list = [(pair.split("=")[0], pair.split("=")[1])
+                    for pair in full_browser_cookie.split("; ")]
+        return cookie_list
+
+    cookie_pairs = split_cookies(full_browser_cookie)
+    cookies_jar = requests.cookies.RequestsCookieJar()
+
+    for cookie_pair in cookie_pairs:
+        cookie_name = cookie_pair[0]
+        cookie_value = cookie_pair[1]
+
+        cookies_jar.set(cookie_name, cookie_value)
+
+    return cookies_jar
 
 
 def domain_from_url(url):
@@ -29,7 +44,7 @@ def re_symbolize_link(link):
 
 url = "https://alx-intranet.hbtn.io/projects/current"
 browser_cookies = os.environ.get("ALX_COOKIES")
-cookies_jar = requests.cookies.RequestsCookieJar()
+cookies_jar = cookies_to_cookiesjar(browser_cookies)
 domain = domain_from_url(url)
 
 scrape_interval = 2  # Interval (in seconds) between requests sent.
@@ -60,11 +75,6 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
         scrape_data["contents"] = []
         scrape_data["cookies_hash"] = hash(applied_cookies)
 
-    for cookie_pair in split_cookies(applied_cookies):
-        cookie_name = cookie_pair[0]
-        cookie_value = cookie_pair[1]
-
-        cookies_jar.set(cookie_name, cookie_value)
 
     # ----------------------------------------------------
 
