@@ -7,7 +7,7 @@
 <form action="{{url_for('alx_scrape_view.archive_page')}}" method="POST">
     <div class="cookie-container">
         <label class="cookie-label" for="custom-cookie">Custom Cookie: </label>
-        <input class="cookie-input" id="custom-cookie" type="text" name="custom-cookie">
+        <input class="cookie-input" id="custom-cookie" type="text" placeholder="Optional. Leave blank to use the default cookie" name="custom-cookie">
         <button class="clear btn" type="button">Clear</button>
     </div>
     <input class="fetch btn" type="submit" value="Fetch ALX Projects (Do This First)">
