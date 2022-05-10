@@ -8,9 +8,22 @@ import re
 from datetime import datetime as dt
 
 
-def cookies_to_cookiesjar(full_browser_cookie):
-    '''takes the complete string of browser cookies and returns a valid cookiejar 
-    object which can be used to authenticate a requests session object'''
+class Script_Cookies():
+    cookies_jar = 1
+    cookies_dict = 2
+    selenium_cookies = 3
+
+
+def browsercookies_to_scriptcookies(full_browser_cookie, mode=Script_Cookies.cookies_jar):
+    '''takes the complete string of browser cookies and returns a valid cookie container 
+    object which can be used to authenticate a requests session object. The cookie 
+    container is either a cookiesjar, a cookies_dictionary, or a selenium cookies list of dictionaries.
+    The cookiesjar and cookies dictionary works with requests, but selenium cookies list 
+    of dictionaries is formatted specifically for selenium
+    
+    NOTE: the selenium cookie authentication doesn't work yet, for unknown reasons even
+    though the cookie format is correct'''
+
 
     def split_cookies(full_browser_cookie):
         '''returns a list of tuples, each tuple containing the (name, value) of 
@@ -22,13 +35,40 @@ def cookies_to_cookiesjar(full_browser_cookie):
     cookie_pairs = split_cookies(full_browser_cookie)
     cookies_jar = requests.cookies.RequestsCookieJar()
 
-    for cookie_pair in cookie_pairs:
-        cookie_name = cookie_pair[0]
-        cookie_value = cookie_pair[1]
+    # using a cookies_jar object
+    if mode == Script_Cookies.cookies_jar:
+        for cookie_pair in cookie_pairs:
+            cookie_name = cookie_pair[0]
+            cookie_value = cookie_pair[1]
 
-        cookies_jar.set(cookie_name, cookie_value)
+            cookies_jar.set(cookie_name, cookie_value)
 
-    return cookies_jar
+        return cookies_jar
+
+    # using a cookies dictionary instead of cookies_jar object
+    # structure:    {"name1": "value1", "name2", "value2", "name3": "value3"}
+    elif mode == Script_Cookies.cookies_dict:
+        cookies_dict = {}
+        for cookie_pair in cookie_pairs:
+            cookie_name = cookie_pair[0]
+            cookie_value = cookie_pair[1]
+
+            cookies_dict[cookie_name] = cookie_value
+
+        return cookies_dict
+
+    # using a selenium cookies list of dictionaries
+    # structure:    [ {"name": "name1", "value": "value1"}, {"name": "name2", "value": "value2"}, {"name": "name3", "value": "value3"} ]
+    elif mode == Script_Cookies.selenium_cookies:
+        selenium_cookie_list = []
+        for cookie_pair in cookie_pairs:
+            cookie_name = cookie_pair[0]
+            cookie_value = cookie_pair[1]
+
+            cookie_dict = {"name": cookie_name, "value": cookie_value}
+            selenium_cookie_list.append(cookie_dict)
+
+        return selenium_cookie_list
 
 
 def domain_from_url(url):
@@ -44,7 +84,7 @@ def re_symbolize_link(link):
 
 url = "https://alx-intranet.hbtn.io/projects/current"
 browser_cookies = os.environ.get("ALX_COOKIES")
-cookies_jar = cookies_to_cookiesjar(browser_cookies)
+cookies_jar = browsercookies_to_scriptcookies(browser_cookies)
 domain = domain_from_url(url)
 
 scrape_interval = 2  # Interval (in seconds) between requests sent.
