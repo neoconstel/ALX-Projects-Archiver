@@ -171,18 +171,23 @@ def scrape_alx_syllabus(scrape_output_directory="alx_syllabus", applied_cookies=
             project_page_path = f"{section_dir}/{link_text}.html"
             project_soup = BeautifulSoup(web_session.get(project_url).text, 'lxml')
             # Get project starting date and project title -- this would be used in sorting the order of the projects and creating a contents file
-            date_regex = re.compile("\d\d-\d\d-\d\d\d\d")
+            date_regex = re.compile("\d\d\d\d-\d\d-\d\d")
+
+            date_elements = project_soup.select('div[data-react-class="common/DateTime"]')
+            if date_elements:
+                start_date_element = date_elements[0]
+                start_datetime_string = json.loads(start_date_element["data-react-props"])["value"]
 
             starting_date_match = None
             try:
-                starting_date_match = re.search(date_regex, project_soup.select(".list-group-item")[2].text)
+                starting_date_match = re.search(date_regex, start_datetime_string)
             except:
                 pass
             
             if starting_date_match:
                 starting_date = starting_date_match.group()
                 # convert to epoch
-                starting_date = dt.strptime(starting_date, "%m-%d-%Y").timestamp()
+                starting_date = dt.strptime(starting_date, "%Y-%m-%d").timestamp()
 
                 project_title = project_soup.select_one("h1").text
 
