@@ -131,4 +131,14 @@
         5000
     );
 </script>
+<script>
+    // any public announcement to be broadcasted ("tojson" filter is necessary 
+    // for the javascript in jinja2 html templates to interpret the python variable)
+    let broadcast = {{broadcast|tojson}};
+    if (broadcast){
+        setTimeout(() => {
+            alert({{broadcast|tojson}});
+        }, 5000);
+    }
+</script>
 {% endblock content %}

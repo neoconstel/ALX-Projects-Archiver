@@ -6,6 +6,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 import redis
 from rq import Queue, Retry
 import time, datetime
+import json
 
 # redis_cache = redis.Redis()  # for development while offline
 redis_cache = redis.from_url(os.environ.get("REDIS_URL"))  # for deployment
@@ -70,11 +71,18 @@ def archive_page():
                 # clear the error message for a fresh start
                 redis_cache.delete("status")
 
+        broadcast = redis_cache.get("broadcast")
+        if broadcast:
+            if type(broadcast) == type("1".encode()): # is status is of <bytes> type
+                broadcast = broadcast.decode()
 
         zip_path = redis_cache.get("zip_path")
         if zip_path:
             zip_path = zip_path.decode()
 
-        return render_template("alx_syllabus.html", status=status, zip_path=zip_path)
+        return render_template("alx_syllabus.html",
+            status=status,
+            zip_path=zip_path,
+            broadcast=broadcast)
 
     
