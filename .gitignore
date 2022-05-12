@@ -10,3 +10,5 @@ scrape_test.py
 hold first
 redis_reset.py
 completed
+broadcast.txt
+
